@@ -28,6 +28,16 @@ Route::group(['middleware' => ['auth','permissions']], function () {
         Route::get('destroy/{id}', 'UserAdminController@destroy')->name('user-admin.destroy');
     });
 
+    Route::group(['prefix' => 'campaign'], function () {
+        Route::get('/', 'CampaignController@index')->name('campaign.index');
+        Route::get('show/{id}', 'CampaignController@show')->name('campaign.show');
+        Route::get('create', 'CampaignController@create')->name('campaign.create');
+        Route::post('store', 'CampaignController@store')->name('campaign.store');
+        Route::get('{id}/edit', 'CampaignController@edit')->name('campaign.edit');
+        Route::post('update/{id}', 'CampaignController@update')->name('campaign.update');
+        Route::get('destroy/{id}', 'CampaignController@destroy')->name('campaign.destroy');
+    });
+
     Route::group(['prefix' => 'phone'], function () {
         Route::get('/', 'PhoneController@index')->name('phone.index');
         Route::get('show/{id}', 'PhoneController@show')->name('phone.show');

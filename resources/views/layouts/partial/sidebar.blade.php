@@ -45,10 +45,11 @@
             </li>
             <li>
                 <a href="javascript:;">
-                    <i class="fa fa-list"></i> Chiến dịch <span class="fa fa-chevron-down"></span>
+                    <i class="fa fa-list"></i> Nhóm chiến dịch <span class="fa fa-chevron-down"></span>
                 </a>
                 <ul class="nav child_menu">
                     <li><a href="{{ route('category.index') }}">Danh sách nhóm chiến dịch</a></li>
+                    <li><a href="{{ route('campaign.index') }}">Chiến dịch con</a></li>
                 </ul>
             </li>
             <li><a href="{{ route('Home_import') }}"><i class="fa fa-upload"></i> Import </a></li>

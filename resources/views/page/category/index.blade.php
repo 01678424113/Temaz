@@ -48,7 +48,7 @@
                                                                         Chiến dịch cha
                                                                     </label>
                                                                     <div class="col-md-12">
-                                                                        {!! Form::select('parent_id', [0 => '...'] + $arrayCategoryParents, old('parent_id'), ['class' => 'form-control select2']) !!}
+                                                                        {!! Form::select('parent_id', [0 => '...'] + $arrayCategoryParents, old('parent_id'), ['class' => 'form-control select2','disabled'=>'']) !!}
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group">
@@ -139,6 +139,7 @@
                                                                                         <div class="col-md-12">
                                                                                             <select name="parent_id"
                                                                                                     class="form-control select2"
+                                                                                                    disabled
                                                                                                     id="">
                                                                                                 @if(!empty($arrayCategoryParents))
                                                                                                     @foreach($arrayCategoryParents as $key=>$arrayMenuParent)
@@ -232,7 +233,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 col-sm-12">
-                        <h2>Thêm chiến dịch </h2>
+                        <h2>Thêm nhóm chiến dịch </h2>
                         <form action="{{ route('category.store') }}" method="post"
                               class="form-horizontal form-label-left">
                             @csrf
@@ -241,7 +242,8 @@
                                     @include('layouts.components.form-html.select2', [
                                         'label' => 'Chiến dịch cha',
                                         'name' => 'parent_id',
-                                        'data' => $arrayCategoryParents
+                                        'data' => $arrayCategoryParents,
+                                        'disabled'=>true
                                     ])
                                 </div>
                                 <div class="col-xs-12">

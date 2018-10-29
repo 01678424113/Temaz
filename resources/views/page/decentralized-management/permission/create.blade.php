@@ -37,7 +37,7 @@
                                                 @include('layouts.components.form-html.input-text', [
                                                     'label' => 'Tên chức năng',
                                                     'name' => 'note',
-                                                    'is_required' => true,
+                                                    'is_required' => false,
                                                     'value' =>'',
                                                 ])
                                             </div>

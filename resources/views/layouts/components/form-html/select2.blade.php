@@ -6,6 +6,7 @@
     <div class="col-md-9 col-sm-9 col-xs-12">
         <select class="select2_single form-control"
                 @if($readonly ?? '') readonly @endif
+                @if($disabled ?? '') disabled @endif
                 @if($is_required ?? '') required @endif
                 id="{{ $id ?? '' }}"
                 name="{{ $name ?? '' }}"
