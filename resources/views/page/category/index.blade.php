@@ -9,7 +9,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Danh sách danh mục </h2>
+                    <h2>Loại chiến dịch</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                         </li>
@@ -45,17 +45,15 @@
                                                             <div class="col-md-12">
                                                                 <div class="form-group">
                                                                     <label class="control-label col-md-12">
-                                                                        Danh mục cha
+                                                                        Chiến dịch cha
                                                                     </label>
                                                                     <div class="col-md-12">
                                                                         {!! Form::select('parent_id', [0 => '...'] + $arrayCategoryParents, old('parent_id'), ['class' => 'form-control select2']) !!}
                                                                     </div>
                                                                 </div>
-
-
                                                                 <div class="form-group">
                                                                     <label class="control-label col-md-12" for="">
-                                                                        Tên danh mục
+                                                                        Tên chiến dịch
                                                                         <span class="required">*</span> </label>
                                                                     <div class="col-md-12">
                                                                         <input type="text" required="" id=""
@@ -136,7 +134,7 @@
                                                                                 <div class="col-md-12">
                                                                                     <div class="form-group">
                                                                                         <label class="control-label col-md-12">
-                                                                                            Danh mục cha
+                                                                                            Chiến dịch cha
                                                                                         </label>
                                                                                         <div class="col-md-12">
                                                                                             <select name="parent_id"
@@ -154,7 +152,7 @@
                                                                                     <div class="form-group">
                                                                                         <label class="control-label col-md-12"
                                                                                                for="">
-                                                                                            Tên danh mục
+                                                                                            Tên chiến dịch
                                                                                             <span class="required">*</span>
                                                                                         </label>
                                                                                         <div class="col-md-12">
@@ -234,21 +232,21 @@
                         </div>
                     </div>
                     <div class="col-md-6 col-sm-12">
-                        <h2>Thêm menu </h2>
+                        <h2>Thêm chiến dịch </h2>
                         <form action="{{ route('category.store') }}" method="post"
                               class="form-horizontal form-label-left">
                             @csrf
                             <div class="row">
                                 <div class="col-xs-12">
                                     @include('layouts.components.form-html.select2', [
-                                        'label' => 'Danh mục cha',
+                                        'label' => 'Chiến dịch cha',
                                         'name' => 'parent_id',
                                         'data' => $arrayCategoryParents
                                     ])
                                 </div>
                                 <div class="col-xs-12">
                                     @include('layouts.components.form-html.input-text', [
-                                        'label' => 'Tên danh mục',
+                                        'label' => 'Tên chiến dịch',
                                         'name' => 'name',
                                         'is_required' => true
                                     ])

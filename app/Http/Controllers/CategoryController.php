@@ -64,9 +64,9 @@ class CategoryController extends Controller
         $flag = $model->save();
 
         if ($flag) {
-            return back()->with('success', 'Tạo danh mục thành công');
+            return back()->with('success', 'Tạo chiến dịch thành công');
         }
-        return back()->with('warning', 'Tạo danh mục không thành công');
+        return back()->with('warning', 'Tạo chiến dịch không thành công');
     }
 
     /**
@@ -132,7 +132,7 @@ class CategoryController extends Controller
         } else {
             $response = [
                 'status' => false,
-                'message' => 'Cập nhật danh mục không thành công'
+                'message' => 'Cập nhật chiến dịch không thành công'
             ];
         }
         return $response;
@@ -151,9 +151,9 @@ class CategoryController extends Controller
         $flag = $model->delete();
 
         if ($flag) {
-            return back()->with('success', 'Xoá danh mục thành công');
+            return back()->with('success', 'Xoá chiến dịch thành công');
         }
-        return back()->with('warning', 'Xoá danh mục không thành công');
+        return back()->with('warning', 'Xoá chiến dịch không thành công');
     }
 
     public function addPhoneToCategory()

@@ -35,21 +35,20 @@
             </li>
             <li>
                 <a href="javascript:;">
-                    <i class="fa fa-phone"></i> Quản lý số điện thoại <span class="fa fa-chevron-down"></span>
+                    <i class="fa fa-phone"></i> Quản lý số điện thoại  <span class="fa fa-chevron-down"></span>
                 </a>
                 <ul class="nav child_menu">
                     <li><a href="{{ route('phone.index') }}">Danh sách số</a></li>
                     <li><a href="{{ route('phone.listNumberBought') }}">Số đã mua</a></li>
-                    <li><a href="{{ route('phone.buyNewNumberPhone') }}">Mua mới</a></li>
+                    <li><a href="{{ route('phone.buyNewNumberPhone')  }}">Mua mới</a></li>
                 </ul>
             </li>
             <li>
                 <a href="javascript:;">
-                    <i class="fa fa-list"></i> Danh mục <span class="fa fa-chevron-down"></span>
+                    <i class="fa fa-list"></i> Chiến dịch <span class="fa fa-chevron-down"></span>
                 </a>
                 <ul class="nav child_menu">
-                    <li><a href="{{ route('category.index') }}">Danh sách</a></li>
-                    <li><a href="{{ route('category.addPhoneToCategory') }}">Cập nhập số vào danh mục</a></li>
+                    <li><a href="{{ route('category.index') }}">Danh sách nhóm chiến dịch</a></li>
                 </ul>
             </li>
             <li><a href="{{ route('Home_import') }}"><i class="fa fa-upload"></i> Import </a></li>
