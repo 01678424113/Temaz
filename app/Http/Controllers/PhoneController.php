@@ -19,9 +19,10 @@ class PhoneController extends Controller
      */
     public function index()
     {
+
         $data = Phone::select('phones.*', 'categories.name as category_name')
             ->join('categories', 'categories.id', '=', 'phones.category_id')
-            ->orderBy('phones.created_at', 'DESC')
+            ->orderBy('phones.time_import', 'DESC')
             ->cursor();
         return view('page.phone.index', compact('data'));
     }
@@ -105,7 +106,7 @@ class PhoneController extends Controller
     {
         $data = Phone::select('phones.*', 'categories.name as category_name')
             ->join('categories', 'categories.id', '=', 'phones.category_id')
-            ->orderBy('phones.created_at', 'DESC')
+            ->orderBy('phones.time_import', 'DESC')
             ->cursor();
         $user = \Auth::user();
         $listNumberBought = AdminPhone::select('phone_id')->where('admin_id', $user->id)->pluck('phone_id')->toArray();
@@ -156,7 +157,7 @@ class PhoneController extends Controller
             ->join('categories', 'categories.id', '=', 'phones.category_id')
             ->join('admin_phones', 'admin_phones.phone_id', '=', 'phones.id')
             ->where('admin_phones.admin_id', $user->id)
-            ->orderBy('phones.created_at', 'DESC')
+            ->orderBy('phones.time_import', 'DESC')
             ->cursor();
         return view('page.phone.listNumberBought', compact('data'));
     }
@@ -165,7 +166,7 @@ class PhoneController extends Controller
     {
         $time = date('Y-m-d', time());
         $timeCycle = env('DELETE_CYCLE');
-        $phones = Phone::select(DB::raw("id, DATEDIFF('{$time}',created_at) as check_time"))->get();
+        $phones = Phone::select(DB::raw("id, DATEDIFF('{$time}',time_import) as check_time"))->get();
         foreach ($phones as $phone){
             if($phone->check_time > $timeCycle){
                 $model = Phone::find($phone->id);

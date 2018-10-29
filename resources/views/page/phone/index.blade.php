@@ -36,7 +36,7 @@
                                     <td>{{ $value->category_name }}</td>
                                     <td>{{ $value->source }}</td>
                                     <td>{{ $value->time }}</td>
-                                    <td>{{ $value->created_at }}</td>
+                                    <td>{{ $value->time_import }}</td>
                                     <td><a target="_blank" href="{{$value->link}}">Click</a></td>
                                     <td>
                                         <a href="{{route('phone.edit',['id'=>$value->id])}}" class="btn btn-xs btn-info"><i

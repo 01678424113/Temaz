@@ -38,7 +38,7 @@
                                     <td>{{ $value->category_name }}</td>
                                     <td>{{ $value->source }}</td>
                                     <td>{{ $value->time }}</td>
-                                    <td>{{ $value->created_at }}</td>
+                                    <td>{{ $value->time_import }}</td>
                                     <td><a target="_blank" href="{{$value->link}}">Click</a></td>
                                     <td>
                                         <button class="btn btn-info" onclick="copy({{$value->id}})">Copy</button>
