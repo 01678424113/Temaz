@@ -52,19 +52,6 @@
                                                 ])
                                             </div>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Số
-                                                        tiền</label>
-                                                    <div class="col-md-9 col-sm-9 col-xs-12">
-                                                        <input type="text"
-                                                               readonly
-                                                               id=""
-                                                               name="amount"
-                                                               value="{{ number_format($model->amount) }}"
-                                                               placeholder=""
-                                                               class="form-control">
-                                                    </div>
-                                                </div>
 
                                                 <div class="form-group">
                                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">
@@ -72,6 +59,14 @@
                                                     </label>
                                                     <div class=" col-md-3 col-sm-6 col-xs-12">
                                                         {!! Form::select('role',$roles, old('role')??$model->getRoleNames(), ['class' => 'form-control select2']) !!}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">
+                                                        Nhóm chiến dịch:
+                                                    </label>
+                                                    <div class=" col-md-3 col-sm-6 col-xs-12">
+                                                        {!! Form::select('category_id',$arrayCategories, $model->category_id, ['class' => 'form-control select2']) !!}
                                                     </div>
                                                 </div>
                                                 <div class="form-group">

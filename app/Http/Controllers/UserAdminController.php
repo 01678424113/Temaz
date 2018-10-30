@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
 use App\Models\Admin;
+use App\Models\Category;
 use App\Notifications\UserAdminNotification;
 use App\Rules\Utf8StringRule;
 use Illuminate\Http\Request;
@@ -33,8 +34,9 @@ class UserAdminController extends Controller
      */
     public function create()
     {
-        $roles = Role::get()->pluck('name','name')->toArray();
-        return view('page.user-manager.create',compact('roles'));
+        $roles = Role::get()->pluck('name', 'name')->toArray();
+        $arrayCategories = Category::where('parent_id', 0)->pluck('name', 'id')->toArray();
+        return view('page.user-manager.create', compact('roles', 'arrayCategories'));
     }
 
     /**
@@ -60,12 +62,12 @@ class UserAdminController extends Controller
         $model->email = $request->email;
         $model->password = bcrypt($request->password);
         $model->status = isset($request->status) ? 1 : 0;
+        $model->category_id = $request->category_id;
         $model->amount = 0;
-        $model->created_at = date('Y-m-d H:i:s');
         $flag = $model->save();
 
         $role = $request->role;
-        if(!empty($request->role)){
+        if (!empty($request->role)) {
             $model->assignRole($role);
         }
         if ($flag) {
@@ -83,8 +85,9 @@ class UserAdminController extends Controller
     public function show($id)
     {
         $model = Admin::findOrFail($id);
-        $roles = Role::get()->pluck('name','name')->toArray();
-        return view('page.user-manager.show', compact('model','roles'));
+        $roles = Role::get()->pluck('name', 'name')->toArray();
+        $arrayCategories = Category::where('parent_id', 0)->pluck('name', 'id')->toArray();
+        return view('page.user-manager.show', compact('model', 'roles', 'arrayCategories'));
     }
 
     /**
@@ -96,8 +99,9 @@ class UserAdminController extends Controller
     public function edit($id)
     {
         $model = Admin::findOrFail($id);
-        $roles = Role::get()->pluck('name','name')->toArray();
-        return view('page.user-manager.edit', compact('model','roles'));
+        $roles = Role::get()->pluck('name', 'name')->toArray();
+        $arrayCategories = Category::where('parent_id', 0)->pluck('name', 'id')->toArray();
+        return view('page.user-manager.edit', compact('model', 'roles', 'arrayCategories'));
     }
 
     /**
@@ -125,12 +129,12 @@ class UserAdminController extends Controller
         $model->email = $request->email;
         $model->password = isset($request->password) ? bcrypt($request->password) : $model->password;
         $model->status = isset($request->status) ? 1 : 0;
-        $model->updated_at = date('Y-m-d H:i:s');
+        $model->category_id = $request->category_id;
         $flag = $model->save();
 
-        if(!empty($request->role)){
+        if (!empty($request->role)) {
             $model->syncRoles($request->role);
-        }else{
+        } else {
             $model->syncRoles([]);
         }
 

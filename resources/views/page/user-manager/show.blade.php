@@ -64,6 +64,14 @@
                                                         {!! Form::select('roles[]', $roles, old('roles')??$model->getRoleNames(), ['class' => 'form-control select2','multiple']) !!}
                                                     </div>
                                                 </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">
+                                                        Nhóm chiến dịch:
+                                                    </label>
+                                                    <div class=" col-md-3 col-sm-6 col-xs-12">
+                                                        {!! Form::select('category_id',$arrayCategories, $model->category_id, ['class' => 'form-control select2']) !!}
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="ln_solid"></div>

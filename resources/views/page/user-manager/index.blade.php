@@ -31,7 +31,7 @@
                             <th>STT</th>
                             <th>Tên nhân viên</th>
                             <th>Email</th>
-                            <th>Số tiền</th>
+                            <th>Nhóm chiến dịch</th>
                             <th>Vai trò</th>
                             <th>Trạng thái</th>
                             <th>Hành động</th>
@@ -44,7 +44,7 @@
                                 <td>{{ $i }}</td>
                                 <td>{{ $item->name }}</td>
                                 <td>{{ $item->email }}</td>
-                                <td>{{ number_format($item->amount) }}</td>
+                                <td>{{ $item->category_name }}</td>
                                 <td>{{ $item->getRoleNames() }}</td>
                                 <td>
                                     <div class="">

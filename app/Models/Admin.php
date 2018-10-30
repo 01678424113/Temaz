@@ -14,7 +14,7 @@ class Admin extends Authenticatable
 
     protected static function getAllData()
     {
-        return Admin::cursor();
+        return Admin::select('admins.*', 'categories.name as category_name')->join('categories', 'categories.id', '=', 'admins.category_id')->cursor();
     }
 
     protected $fillable = [
