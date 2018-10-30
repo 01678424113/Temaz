@@ -27,14 +27,9 @@
                                         <div class="row">
                                             <div class="col-md-6 col-sm-6 col-xs-12">
                                                 <div class="form-group">
-                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Nguồn<span class="required">*</span></label>
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Chiến dịch<span class="required">*</span></label>
                                                     <div class="col-md-9 col-sm-9 col-xs-12">
-                                                        <select name="source" id="" class="form-control">
-                                                            <option value="viettel">Viettel</option>
-                                                            <option value="mobiphone">Mobiphone</option>
-                                                            <option value="vinaphone">Vinaphone</option>
-                                                            <option value="facebook">Facebook</option>
-                                                        </select>
+                                                        {!! Form::select('campaign_id',$campaigns, old('campaign_id'), ['class' => 'form-control select2']) !!}
                                                     </div>
                                                 </div>
                                                 <div class="form-group">

@@ -9,7 +9,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Loại chiến dịch</h2>
+                    <h2>Dịch vụ</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                         </li>
@@ -45,7 +45,7 @@
                                                             <div class="col-md-12">
                                                                 <div class="form-group">
                                                                     <label class="control-label col-md-12">
-                                                                        Chiến dịch cha
+                                                                        Dịch vụ cha
                                                                     </label>
                                                                     <div class="col-md-12">
                                                                         {!! Form::select('parent_id', [0 => '...'] + $arrayCategoryParents, old('parent_id'), ['class' => 'form-control select2','disabled'=>'']) !!}
@@ -53,7 +53,7 @@
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label class="control-label col-md-12" for="">
-                                                                        Tên chiến dịch
+                                                                        Tên dịch vụ
                                                                         <span class="required">*</span> </label>
                                                                     <div class="col-md-12">
                                                                         <input type="text" required="" id=""
@@ -134,7 +134,7 @@
                                                                                 <div class="col-md-12">
                                                                                     <div class="form-group">
                                                                                         <label class="control-label col-md-12">
-                                                                                            Chiến dịch cha
+                                                                                            Dịch vụ cha
                                                                                         </label>
                                                                                         <div class="col-md-12">
                                                                                             <select name="parent_id"
@@ -153,7 +153,7 @@
                                                                                     <div class="form-group">
                                                                                         <label class="control-label col-md-12"
                                                                                                for="">
-                                                                                            Tên chiến dịch
+                                                                                            Tên dịch vụ
                                                                                             <span class="required">*</span>
                                                                                         </label>
                                                                                         <div class="col-md-12">
@@ -233,14 +233,14 @@
                         </div>
                     </div>
                     <div class="col-md-6 col-sm-12">
-                        <h2>Thêm nhóm chiến dịch </h2>
+                        <h2>Thêm dịch vụ </h2>
                         <form action="{{ route('category.store') }}" method="post"
                               class="form-horizontal form-label-left">
                             @csrf
                             <div class="row">
                                 <div class="col-xs-12">
                                     @include('layouts.components.form-html.select2', [
-                                        'label' => 'Chiến dịch cha',
+                                        'label' => 'Dịch vụ cha',
                                         'name' => 'parent_id',
                                         'data' => $arrayCategoryParents,
                                         'disabled'=>true
@@ -248,7 +248,7 @@
                                 </div>
                                 <div class="col-xs-12">
                                     @include('layouts.components.form-html.input-text', [
-                                        'label' => 'Tên chiến dịch',
+                                        'label' => 'Tên dịch vụ',
                                         'name' => 'name',
                                         'is_required' => true
                                     ])

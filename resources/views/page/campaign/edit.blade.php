@@ -48,8 +48,7 @@
                                             </div>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
                                                 <div class="form-group">
-                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Nhóm
-                                                        chiến dịch</label>
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Dịch vụ</label>
                                                     <div class="col-md-9 col-sm-9 col-xs-12">
                                                         {!! Form::select('category_id', $arrayCategories, $campaign->category_id, ['class' => 'form-control select2 select-category']) !!}
                                                     </div>

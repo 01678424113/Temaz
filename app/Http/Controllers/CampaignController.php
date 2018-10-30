@@ -6,6 +6,7 @@ use App\Libs\Helpers;
 use App\Models\Admin;
 use App\Models\Campaign;
 use App\Models\Category;
+use App\Models\Phone;
 use App\Rules\Utf8StringRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -31,7 +32,7 @@ class CampaignController extends Controller
             $data = Campaign::select('campaigns.*', 'categories.name as category_name')
                 ->join('categories', 'categories.id', '=', 'campaigns.category_id')
                 ->where('campaigns.category_id', $request->category_id)
-                ->orderBy('campaigns.time_import', 'DESC')
+                ->orderBy('campaigns.created_at', 'DESC')
                 ->cursor();
             $category_id = $request->category_id;
         }
@@ -90,7 +91,8 @@ class CampaignController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = Phone::where('campaign_id',$id)->cursor();
+        return view('page.campaign.show',compact('data'));
     }
 
     /**

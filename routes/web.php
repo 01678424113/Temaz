@@ -46,9 +46,6 @@ Route::group(['middleware' => ['auth','permissions']], function () {
         Route::get('{id}/edit', 'PhoneController@edit')->name('phone.edit');
         Route::post('update/{id}', 'PhoneController@update')->name('phone.update');
         Route::get('destroy/{id}', 'PhoneController@destroy')->name('phone.destroy');
-        Route::get('buy-new', 'PhoneController@buyNewNumberPhone')->name('phone.buyNewNumberPhone');
-        Route::get('buy-new/{id}', 'PhoneController@doBuyNewNumberPhone')->name('phone.doBuyNewNumberPhone');
-        Route::get('list-number', 'PhoneController@listNumberBought')->name('phone.listNumberBought');
         Route::get('delete-cycle', 'PhoneController@deleteCycle')->name('phone.deleteCycle');
     });
 

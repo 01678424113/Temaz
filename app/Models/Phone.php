@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Phone extends Model
 {
     //
-    protected static $BOUGHT = 1;
-    protected static $UNBOUGHT = 1;
-    protected $fillable = ['phone', 'category_id', 'ip', 'address', 'link', 'time', 'status', 'created_at', 'updated_at'];
+    public static $FAIL = -1;
+    public static $NOT_PROCESS = 0;
+    public static $PROCESS = 1;
+    public static $SUCCESS = 2;
 }

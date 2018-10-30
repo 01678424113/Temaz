@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Campaign;
 use App\Models\Phone;
 use App\Models\Transaction;
 use DB;
@@ -36,50 +37,54 @@ class HomeController extends Controller
 
     public function import()
     {
-        return view('page.import.create');
+        $campaigns = Campaign::select('id', 'name')->pluck('name', 'id')->toArray();
+        return view('page.import.create', compact('campaigns'));
     }
 
     public function doImport(Request $request)
     {
         $file = $request->file('file');
-        $type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        $campaign_id = $request->campaign_id;
+        $type = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/zip'];
         if (!empty($file)) {
-            if ($file->getMimeType() == $type) {
+            if (in_array($file->getMimeType(), $type)) {
                 $path = $file->getRealPath();
                 $fileContent = Excel::load($path)->get();
-                if (!empty($fileContent)) {
-                    $i = 1;
-                    foreach ($fileContent as $key => $value) {
-                        $source = $request->source;
-                        if ($request->source == 'viettel') {
-                            if (!empty($value->so_dien_thoai)) {
-                                if (gettype($value->so_dien_thoai) == 'double') {
-                                    $phone = 0 . (int)$value->so_dien_thoai;
-                                    $check = Phone::where('phone', $phone)->first();
-                                    if (empty($check)) {
-                                        $insert[] = [
-                                            'phone' => $phone,
-                                            'time' => $value->thoi_gian,
-                                            'link' => $value->duong_link,
-                                            'ip' => $value->dia_chi_ip,
-                                            'source' => $source,
-                                            'created_at' => date('Y-m-d')
-                                        ];
-                                    }
-                                }
+                if (!empty($fileContent[0])) {
+                    foreach ($fileContent[0] as $key => $value) {
+                        if (!empty($value->sdt)) {
+                            $phone = 0 . (int)$value->sdt;
+                            $check = Phone::where('phone', $phone)->first();
+                            if (empty($check)) {
+                                $insert[] = [
+                                    'name' => $value->ho_va_ten,
+                                    'phone' => (int)$value->sdt,
+                                    'campaign_id' => $campaign_id,
+                                    'email' => (!empty($value->email) ? $value->email : ''),
+                                    'source' => $value->nguon,
+                                    'time' => $value->ngay,
+                                    'status' => $value->check,
+                                    'id' => $value->ip,
+                                    'note' => $value->ghi_chu,
+                                    'sale' => $value->sales,
+                                    'created_at' => date('Y-m-d H:i:s'),
+                                    'updated_at' => '',
+                                ];
                             }
                         }
-                        $i++;
                     }
                 }
                 try {
-                    Phone::insert($insert);
-                    return redirect()->back()->with('success', 'Import thành công');
+                    if (!empty($insert)) {
+                        Phone::insert($insert);
+                        return redirect()->back()->with('success', 'Import thành công');
+                    }
+                    return redirect()->back()->with('error', 'File này đã được sử dụng');
                 } catch (\Exception $e) {
-                    return redirect()->back()->with('success', 'Đã xảy ra lỗi');
+                    return redirect()->back()->with('error', 'Đã xảy ra lỗi');
                 }
             }
-        }else{
+        } else {
             return redirect()->back()->with('success', 'Không thể import file rỗng');
         }
     }

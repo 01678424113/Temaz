@@ -19,7 +19,7 @@
                                 Nhóm chiến dịch
                             </label>
                             <div class="col-md-5 col-sm-5 col-xs-12">
-                                {!! Form::select('category_id', [0 => '...'] + $arrayCategories, $category_id, ['class' => 'form-control select2 select-category']) !!}
+                                {!! Form::select('category_id', [0 => 'Tất cả'] + $arrayCategories, $category_id, ['class' => 'form-control select2 select-category']) !!}
                             </div>
                         </div>
                     </div>
@@ -32,7 +32,7 @@
                         <tr>
                             <th>STT</th>
                             <th>Tên chiến dịch</th>
-                            <th>Nhóm chiến dịch</th>
+                            <th>Dịch vụ</th>
                             <th>Trạng thái</th>
                             <th>Thời gian tạo</th>
                             <th>Hành động</th>
@@ -45,9 +45,19 @@
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $value->name }}</td>
                                     <td>{{ $value->category_name }}</td>
-                                    <td><label for="" class="btn-success">{{ $value->status }}</label></td>
+                                    <td>
+                                        <input type="checkbox"
+                                               @if($value->status == 1) checked @endif
+                                               class=""/>
+                                    </td>
                                     <td>{{ $value->created_at }}</td>
                                     <td>
+                                        <a href="{{route('Home_import')}}"
+                                           class="btn btn-xs btn-success"><i
+                                                    class="fa fa-upload"></i></a>
+                                        <a href="{{route('campaign.show',['id'=>$value->id])}}"
+                                           class="btn btn-xs btn-info"><i
+                                                    class="fa fa-eye"></i></a>
                                         <a href="{{route('campaign.edit',['id'=>$value->id])}}"
                                            class="btn btn-xs btn-info"><i
                                                     class="fa fa-edit"></i></a>
