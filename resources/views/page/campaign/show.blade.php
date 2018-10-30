@@ -18,13 +18,12 @@
                         <thead>
                         <tr>
                             <th></th>
-                            <th>Thông tin</th>
-                            <th>Nguồn</th>
-                            <th>Ngày</th>
+                            <th style="max-width: 200px;">Thông tin</th>
+                            <th style="max-width: 70px;">Sale</th>
+                            <th style="max-width: 70px;">Ngày</th>
                             <th>Note</th>
-                            <th>Check</th>
-                            <th>Sale</th>
-                            <th></th>
+                            <th style="max-width: 70px;">Check</th>
+                            <th style="max-width: 50px;"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -33,17 +32,41 @@
                                 <tr>
                                     <td class="text-center">{{ $key + 1 }}</td>
                                     <td>
-                                        {{ $value->name }}<br>
-                                        {{ $value->email }}<br>
-                                        {{ $value->phone }}
+                                        Tên: {{ $value->name }}<br>
+                                        Email: {{ $value->email }}<br>
+                                        SDT: {{ $value->phone }}<br>
+                                        Nguồn: {{ $value->source }}<br>`
+                                        Trang
+                                        thái: {{($value->status == \App\Models\Phone::$FAIL) ? 'Thất bại' : ''}}{{($value->status == \App\Models\Phone::$NOT_PROCESS) ? 'Chưa hỗ trợ' : ''}}{{($value->status == \App\Models\Phone::$PROCESS) ? 'Chờ phản hồi' : ''}}{{($value->status == \App\Models\Phone::$SUCCESS) ? 'Thành công' : ''}}
                                     </td>
-                                    <td>{{ $value->source }}</td>
+                                    <td>{{ $value->sale }}</td>
                                     <td>{{ $value->time }}</td>
-                                    <td><textarea name="" id="" cols="30" class="form-control" rows="10">{{$value->note}}</textarea></td>
-                                    <td>
-                                       Số sale
-                                    </td>
-                                    <td>{!! $value->sale !!}</td>
+                                    <form action="{{route('phone.updateNote',['id'=>$value->id])}}"
+                                          id="data-{{$value->id}}" method="post">
+                                        @csrf
+                                        <td>
+
+                                            <textarea name="note" id="" cols="30" class="form-control" rows="10"
+                                                      onblur="changeNote({{$value->id}})"
+                                                      style="width: 100%">{{$value->note}}</textarea>
+                                        </td>
+                                        <td>
+                                            <select name="status" class="form-control select-status" onchange="changeNote({{$value->id}})">
+                                                <option value="{{\App\Models\Phone::$FAIL}}" {{($value->status == \App\Models\Phone::$FAIL) ? 'selected' : ''}}>
+                                                    Thất bại
+                                                </option>
+                                                <option value="{{\App\Models\Phone::$NOT_PROCESS}}" {{($value->status == \App\Models\Phone::$NOT_PROCESS) ? 'selected' : ''}}>
+                                                    Chưa hỗ trợ
+                                                </option>
+                                                <option value="{{\App\Models\Phone::$PROCESS}}" {{($value->status == \App\Models\Phone::$PROCESS) ? 'selected' : ''}}>
+                                                    Chờ phản hồi
+                                                </option>
+                                                <option value="{{\App\Models\Phone::$SUCCESS}}" {{($value->status == \App\Models\Phone::$SUCCESS) ? 'selected' : ''}}>
+                                                    Thành công
+                                                </option>
+                                            </select>
+                                        </td>
+                                    </form>
                                     <td class="text-center">
                                         <a href="{{route('phone.edit',['id'=>$value->id])}}"
                                            class="btn btn-xs btn-info"><i
@@ -64,8 +87,20 @@
 @endsection
 @section('script')
     <script>
-        $('.select-category').change(function () {
-            $('#search_category').submit();
-        })
+        function changeNote(id) {
+            var url = $("#data-" + id).attr('action');
+            $.ajax({
+                url: url,
+                method: 'post',
+                data: $("#data-" + id).serialize(),
+                success: function (data) {
+                    if (data['status']) {
+                        console.log(data['message']);
+                    } else {
+                        console.log(data['message']);
+                    }
+                }
+            })
+        }
     </script>
 @endsection

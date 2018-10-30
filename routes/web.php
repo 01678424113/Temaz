@@ -47,6 +47,7 @@ Route::group(['middleware' => ['auth','permissions']], function () {
         Route::post('update/{id}', 'PhoneController@update')->name('phone.update');
         Route::get('destroy/{id}', 'PhoneController@destroy')->name('phone.destroy');
         Route::get('delete-cycle', 'PhoneController@deleteCycle')->name('phone.deleteCycle');
+        Route::post('update-note/{id}', 'PhoneController@updateNote')->name('phone.updateNote');
     });
 
     Route::group(['prefix' => 'category'], function () {

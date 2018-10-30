@@ -129,7 +129,7 @@ class PhoneController extends Controller
      */
     public function destroy($id)
     {
-        $model = Phone::findOrFail($id);
+        $model = Phone::find($id);
         if (!empty($model)) {
             $model->delete();
             return redirect()->back()->with('success', 'Xóa data thành công');
@@ -151,6 +151,27 @@ class PhoneController extends Controller
             }
         }
         return 'OK';
+    }
+
+    public function updateNote(Request $request, $id)
+    {
+        $model = Phone::find($id);
+        if (!empty($model)) {
+            $model->note = $request->note;
+            $model->status = $request->status;
+            $model->save();
+            $response = [
+                'status' => 1,
+                'message' => 'Cập nhập thành công'
+            ];
+            return $response;
+        } else {
+            $response = [
+                'status' => -1,
+                'message' => 'Đã xảy ra lỗi. Vui lòng thử lại sau'
+            ];
+            return $response;
+        }
     }
 }
 
