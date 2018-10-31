@@ -7,7 +7,7 @@
                 <div class="x_title">
                     <h2>Danh số điện thoại </h2>
                     <ul class="nav navbar-right panel_toolbox" style="display: flex;justify-content: flex-end;">
-                        <li><a href="{{route('campaign.create')}}" style="color:#26B99A;"><i class="fa fa-plus"></i></a>
+                        <li><a href="{{route('phone.create')}}" style="color:#26B99A;"><i class="fa fa-plus"></i></a>
                         </li>
                     </ul>
                     <div class="clearfix"></div>
@@ -35,7 +35,7 @@
                                         Tên: {{ $value->name }}<br>
                                         Email: {{ $value->email }}<br>
                                         SDT: {{ $value->phone }}<br>
-                                        Nguồn: {{ $value->source }}<br>`
+                                        Nguồn: {{ $value->source }}<br>
                                         Trang
                                         thái: {{($value->status == \App\Models\Phone::$FAIL) ? 'Thất bại' : ''}}{{($value->status == \App\Models\Phone::$NOT_PROCESS) ? 'Chưa hỗ trợ' : ''}}{{($value->status == \App\Models\Phone::$PROCESS) ? 'Chờ phản hồi' : ''}}{{($value->status == \App\Models\Phone::$SUCCESS) ? 'Thành công' : ''}}
                                     </td>

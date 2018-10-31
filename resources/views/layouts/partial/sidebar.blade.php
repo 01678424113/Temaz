@@ -30,7 +30,6 @@
                     <li><a href="{{ route('campaign.index') }}">Chiến dịch</a></li>
                 </ul>
             </li>
-            <li><a href="{{ route('Home_import') }}"><i class="fa fa-upload"></i> Import </a></li>
         </ul>
     </div>
 </div>

@@ -66,7 +66,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">
-                                                        Nhóm chiến dịch:
+                                                       Dịch vụ:
                                                     </label>
                                                     <div class=" col-md-3 col-sm-6 col-xs-12">
                                                         {!! Form::select('category_id',$arrayCategories, $model->category_id, ['class' => 'form-control select2']) !!}

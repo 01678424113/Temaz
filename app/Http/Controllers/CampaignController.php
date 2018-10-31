@@ -22,21 +22,32 @@ class CampaignController extends Controller
      */
     public function index(Request $request)
     {
-        if (empty($request->category_id)) {
-            $data = Campaign::select('campaigns.*', 'categories.name as category_name')
-                ->join('categories', 'categories.id', '=', 'campaigns.category_id')
-                ->orderBy('campaigns.created_at', 'DESC')
-                ->cursor();
-            $category_id = 0;
+        $user = \Auth::user();
+        if ($user->getRoleNames()[0] == 'admin') {
+            if (empty($request->category_id)) {
+                $data = Campaign::select('campaigns.*', 'categories.name as category_name')
+                    ->join('categories', 'categories.id', '=', 'campaigns.category_id')
+                    ->orderBy('campaigns.created_at', 'DESC')
+                    ->cursor();
+                $category_id = 0;
+            } else {
+                $data = Campaign::select('campaigns.*', 'categories.name as category_name')
+                    ->join('categories', 'categories.id', '=', 'campaigns.category_id')
+                    ->where('campaigns.category_id', $request->category_id)
+                    ->orderBy('campaigns.created_at', 'DESC')
+                    ->cursor();
+                $category_id = $request->category_id;
+            }
+            $arrayCategories = Category::where('parent_id', 0)->pluck('name', 'id')->toArray();
         } else {
             $data = Campaign::select('campaigns.*', 'categories.name as category_name')
                 ->join('categories', 'categories.id', '=', 'campaigns.category_id')
-                ->where('campaigns.category_id', $request->category_id)
+                ->where('campaigns.category_id', $user->category_id)
                 ->orderBy('campaigns.created_at', 'DESC')
                 ->cursor();
-            $category_id = $request->category_id;
+            $category_id = 0;
+            $arrayCategories = Category::where('id', $user->category_id)->pluck('name', 'id')->toArray();
         }
-        $arrayCategories = Category::where('parent_id', 0)->pluck('name', 'id')->toArray();
         return view('page.campaign.index', compact('data', 'arrayCategories', 'category_id'));
     }
 
@@ -91,8 +102,8 @@ class CampaignController extends Controller
      */
     public function show($id)
     {
-        $data = Phone::where('campaign_id',$id)->cursor();
-        return view('page.campaign.show',compact('data'));
+        $data = Phone::where('campaign_id', $id)->cursor();
+        return view('page.campaign.show', compact('data'));
     }
 
     /**
@@ -120,7 +131,7 @@ class CampaignController extends Controller
         $model = Campaign::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            'name' => ['required', new Utf8StringRule(),'max:191', Rule::unique('admins')->ignore($model->name, 'name')],
+            'name' => ['required', new Utf8StringRule(), 'max:191', Rule::unique('admins')->ignore($model->name, 'name')],
             'slug' => 'required',
             'category_id' => 'required',
         ]);
@@ -151,10 +162,10 @@ class CampaignController extends Controller
     public function destroy($id)
     {
         $model = Campaign::find($id);
-        if(!empty($model)){
+        if (!empty($model)) {
             $model->delete();
             return redirect()->back()->with('success', 'Xóa chiến dịch thành công');
-        }else{
+        } else {
             return redirect()->back()->with('error', 'Chiến dịch không tồn tại');
         }
     }
