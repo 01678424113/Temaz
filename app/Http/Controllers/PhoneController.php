@@ -207,5 +207,23 @@ class PhoneController extends Controller
             return $response;
         }
     }
+
+    public function testAPI()
+    {
+        $response = [
+            [
+                'name' => 'Nguyen Ha',
+                'phone' => 84378424113,
+                'email' => 'nguyenha.dev.webste@gmail.com',
+                'source' => 'Laluna',
+                'time' => '2018-10-30 15:30:01',
+                'note' => '',
+                'sales' => 'Loan',
+                'ip' => '192.168.1.1',
+                'status' => 1,
+            ]
+        ];
+        exit(json_encode($response));
+    }
 }
 

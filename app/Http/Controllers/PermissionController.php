@@ -22,7 +22,7 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        $data = Permission::cursor();
+        $data = Permission::select('*')->orderBy('name','ASC')->cursor();
         return view('page.decentralized-management.permission.index', compact('data'));
     }
 

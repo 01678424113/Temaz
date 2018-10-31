@@ -54,7 +54,7 @@ class HomeController extends Controller
                     foreach ($fileContent[0] as $key => $value) {
                         if (!empty($value->sdt)) {
                             $phone = 0 . (int)$value->sdt;
-                            $check = Phone::where('phone', $phone)->first();
+                            $check = Phone::where('phone', $phone)->where('campaign_id',$campaign_id)->first();
                             if (empty($check)) {
                                 $insert[] = [
                                     'name' => $value->ho_va_ten,

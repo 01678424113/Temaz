@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
+use App\Models\AdminModelHasRoles;
 use App\Rules\Utf8StringRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -102,7 +103,9 @@ class RoleController extends Controller
         }
         try {
             $role = Role::findOrFail($id);
-            $role->name = $request->name;
+            if($id != 1){
+                $role->name = $request->name;
+            }
             $role->save();
             $permissions = $request->permissions;
             $role->syncPermissions($permissions);
@@ -120,6 +123,13 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $role = Role::find($id);
+        if($id != 1){
+            /*$role->delete();
+            AdminModelHasRoles::where('role_id',$id)->delete();*/
+            return redirect()->back()->with('success','Chức năng này hiện tạm bị khóa');
+        }else{
+            return redirect()->back()->with('error','Không thể xóa quyền admin');
+        }
     }
 }

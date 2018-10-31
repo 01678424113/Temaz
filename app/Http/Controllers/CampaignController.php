@@ -82,7 +82,7 @@ class CampaignController extends Controller
         $model = new Campaign();
         $model->name = $request->name;
         $model->api = $request->api;
-        $model->status = isset($request->status) ? 1 : 0;
+        $model->status = isset($request->status) ? Campaign::$ACTIVE : Campaign::$UN_ACTIVE;
         $model->sort_by = $request->sort_by;
         $model->category_id = !empty($request->category_id) ? $request->category_id : 1;
         $flag = $model->save();
@@ -102,7 +102,12 @@ class CampaignController extends Controller
     public function show($id)
     {
         $data = Phone::where('campaign_id', $id)->cursor();
-        return view('page.campaign.show', compact('data'));
+        $campaign = Campaign::where('id',$id)->where('status',Campaign::$ACTIVE)->first();
+        if(!empty($campaign)){
+            return view('page.campaign.show', compact('data'));
+        }else{
+            return redirect()->back()->with('error','Chiến dịch này không hoạt động hoặc không tồn tại');
+        }
     }
 
     /**
@@ -140,7 +145,7 @@ class CampaignController extends Controller
 
         $model->name = $request->name;
         $model->api = $request->api;
-        $model->status = isset($request->status) ? 1 : 0;
+        $model->status = isset($request->status) ? Campaign::$ACTIVE : Campaign::$UN_ACTIVE;
         $model->sort_by = $request->sort_by;
         $model->category_id = !empty($request->category_id) ? $request->category_id : 1;
         $flag = $model->save();
