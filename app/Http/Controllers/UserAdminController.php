@@ -62,7 +62,7 @@ class UserAdminController extends Controller
         $model->email = $request->email;
         $model->password = bcrypt($request->password);
         $model->status = isset($request->status) ? 1 : 0;
-        $model->category_id = $request->category_id;
+        $model->category_id = !empty($request->category_id) ? $request->category_id : 1;
         $model->amount = 0;
         $flag = $model->save();
 
@@ -129,7 +129,7 @@ class UserAdminController extends Controller
         $model->email = $request->email;
         $model->password = isset($request->password) ? bcrypt($request->password) : $model->password;
         $model->status = isset($request->status) ? 1 : 0;
-        $model->category_id = $request->category_id;
+        $model->category_id = !empty($request->category_id) ? $request->category_id : 1;
         $flag = $model->save();
 
         if (!empty($request->role)) {

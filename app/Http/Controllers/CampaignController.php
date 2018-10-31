@@ -72,7 +72,6 @@ class CampaignController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', new Utf8StringRule(), 'max:191', Rule::unique('campaigns')],
-            'slug' => 'required',
             'category_id' => 'required',
         ]);
         if ($validator->fails()) {
@@ -82,10 +81,10 @@ class CampaignController extends Controller
 
         $model = new Campaign();
         $model->name = $request->name;
-        $model->slug = $this->getSlug($request->slug);
+        $model->api = $request->api;
         $model->status = isset($request->status) ? 1 : 0;
         $model->sort_by = $request->sort_by;
-        $model->category_id = $request->category_id;
+        $model->category_id = !empty($request->category_id) ? $request->category_id : 1;
         $flag = $model->save();
 
         if ($flag) {
@@ -132,7 +131,6 @@ class CampaignController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => ['required', new Utf8StringRule(), 'max:191', Rule::unique('admins')->ignore($model->name, 'name')],
-            'slug' => 'required',
             'category_id' => 'required',
         ]);
         if ($validator->fails()) {
@@ -141,10 +139,10 @@ class CampaignController extends Controller
         }
 
         $model->name = $request->name;
-        $model->slug = $this->getSlug($request->slug);
+        $model->api = $request->api;
         $model->status = isset($request->status) ? 1 : 0;
         $model->sort_by = $request->sort_by;
-        $model->category_id = $request->category_id;
+        $model->category_id = !empty($request->category_id) ? $request->category_id : 1;
         $flag = $model->save();
 
         if ($flag) {

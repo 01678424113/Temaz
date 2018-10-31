@@ -33,11 +33,11 @@
                                                     'value' =>'',
                                                 ])
                                                 @include('layouts.components.form-html.input-text', [
-                                                   'label' => 'Slug',
-                                                   'name' => 'slug',
-                                                   'is_required' => true,
-                                                   'value' =>''
-                                               ])
+                                                'label' => 'API',
+                                                'name' => 'api',
+                                                'is_required' => false,
+                                                'value' => ''
+                                            ])
                                                 @include('layouts.components.form-html.input-text', [
                                                   'label' => 'Sắp xếp',
                                                   'name' => 'sort_by',
