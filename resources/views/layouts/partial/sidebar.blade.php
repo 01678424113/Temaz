@@ -30,6 +30,15 @@
                     <li><a href="{{ route('campaign.index') }}">Chiến dịch</a></li>
                 </ul>
             </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="fa fa-list"></i> SMS <span class="fa fa-chevron-down"></span>
+                </a>
+                <ul class="nav child_menu">
+                    <li><a href="{{ route('sms-data.index') }}">Danh sách</a></li>
+                    <li><a href="{{ route('sms-data.import') }}">Import</a></li>
+                </ul>
+            </li>
         </ul>
     </div>
 </div>

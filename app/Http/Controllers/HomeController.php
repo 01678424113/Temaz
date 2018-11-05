@@ -54,7 +54,7 @@ class HomeController extends Controller
                     foreach ($fileContent[0] as $key => $value) {
                         if (!empty($value->sdt)) {
                             $phone = 0 . (int)$value->sdt;
-                            $check = Phone::where('phone', $phone)->where('campaign_id',$campaign_id)->first();
+                            $check = Phone::where('phone', $phone)->where('campaign_id', $campaign_id)->first();
                             if (empty($check)) {
                                 $insert[] = [
                                     'name' => $value->ho_va_ten,
@@ -87,5 +87,63 @@ class HomeController extends Controller
         } else {
             return redirect()->back()->with('success', 'Không thể import file rỗng');
         }
+    }
+
+    public function test()
+    {
+        $arrayPhones = [];
+        for ($i = 1; $i <= 996; $i++) {
+            if($i == 1){
+                $url = 'https://batdongsan.com.vn/nha-dat-cho-thue-tp-hcm';
+            }else{
+                $url = 'https://batdongsan.com.vn/nha-dat-cho-thue-tp-hcm/p'.$i;
+            }
+            $text = $this->cUrl($url);
+            $matches = array();
+            // returns all results in array $matches
+            preg_match_all('/[0-9]{4}[\.][0-9]{3}[\.][0-9]{3}|[0-9]{4}[\s][0-9]{3}[\s][0-9]{3}|[0-9]{11}|[0-9]{10}/', $text, $matches);
+            $matches = array_unique($matches[0]);
+            foreach ($matches as $key => $match) {
+                $arrayPhones[] = str_replace(['.', '-', ' '], ['', '', ''], trim($match));
+            }
+            foreach ($arrayPhones as $key => $phone) {
+                preg_match('/^(09[0-9]|08[0-9]|07[0-9]|05[0-9]|03[0-9])[0-9]{7}|(016[0-9]|012[0-9])[0-9]{7}$/', $phone, $matches);
+                if (empty($matches)) {
+                    unset($arrayPhones[$key]);
+                }
+            }
+        }
+        var_dump($arrayPhones);
+    }
+
+    public function cUrl($url)
+    {
+        $user_agent = 'Mozilla/5.0 (Windows NT 6.1; rv:8.0) Gecko/20100101 Firefox/8.0';
+        $options = array(
+            CURLOPT_CUSTOMREQUEST => "GET",        //set request type post or get
+            CURLOPT_POST => false,        //set to GET
+            CURLOPT_USERAGENT => $user_agent, //set user agent
+            CURLOPT_COOKIEFILE => "cookie.txt", //set cookie file
+            CURLOPT_COOKIEJAR => "cookie.txt", //set cookie jar
+            CURLOPT_RETURNTRANSFER => true,     // return web page
+            CURLOPT_HEADER => false,    // don't return headers
+            CURLOPT_FOLLOWLOCATION => true,     // follow redirects
+            CURLOPT_ENCODING => "",       // handle all encodings
+            CURLOPT_AUTOREFERER => true,     // set referer on redirect
+            CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
+            CURLOPT_TIMEOUT => 120,      // timeout on response
+            CURLOPT_MAXREDIRS => 10,       // stop after 10 redirects
+        );
+        $ch = curl_init($url);
+        curl_setopt_array($ch, $options);
+        $content = curl_exec($ch);
+        $err = curl_errno($ch);
+        $errmsg = curl_error($ch);
+        $header = curl_getinfo($ch);
+        curl_close($ch);
+        $header['errno'] = $err;
+        $header['errmsg'] = $errmsg;
+        $header['content'] = $content;
+        return $content;
     }
 }

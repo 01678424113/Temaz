@@ -19,6 +19,7 @@ Route::match(['get', 'post'], '/forgot-reset-password/{token}', 'Auth\ForgotPass
 Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('/api', 'PhoneController@testAPI')->name('testAPI');
+Route::get('/test', 'HomeController@test')->name('test');
 
 Route::group(['middleware' => ['auth','permissions']], function () {
     Route::group(['prefix' => 'user-manager'], function () {
@@ -29,6 +30,22 @@ Route::group(['middleware' => ['auth','permissions']], function () {
         Route::get('{id}/edit', 'UserAdminController@edit')->name('user-admin.edit');
         Route::post('update/{id}', 'UserAdminController@update')->name('user-admin.update');
         Route::get('destroy/{id}', 'UserAdminController@destroy')->name('user-admin.destroy');
+    });
+
+    Route::group(['prefix' => 'sms-data'], function () {
+        Route::get('/', 'SmsDataController@index')->name('sms-data.index');
+        Route::get('create', 'SmsDataController@create')->name('sms-data.create');
+        Route::post('store', 'SmsDataController@store')->name('sms-data.store');
+        Route::get('{id}/edit', 'SmsDataController@edit')->name('sms-data.edit');
+        Route::post('update/{id}', 'SmsDataController@update')->name('sms-data.update');
+        Route::get('destroy/{id}', 'SmsDataController@destroy')->name('sms-data.destroy');
+        Route::get('import', 'SmsDataController@import')->name('sms-data.import');
+        Route::post('import', 'SmsDataController@doImport')->name('sms-data.doImport');
+
+        Route::get('send/{phone
+        }', 'SmsDataController@sendSms')->name('sms-data.sendSms');
+        Route::get('sample', 'SmsDataController@sampleSms')->name('sms-data.sampleSms');
+        Route::post('sample', 'SmsDataController@doSampleSms')->name('sms-data.doSampleSms');
     });
 
     Route::group(['prefix' => 'campaign'], function () {
