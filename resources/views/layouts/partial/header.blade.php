@@ -12,7 +12,6 @@
     <div class="profile_info">
         <span>Xin chào,</span>
         <h2>{{Auth::user()->name}}</h2>
-        <span>{{number_format(Auth::user()->amount)}} VND</span>
     </div>
 </div>
 <!-- /menu profile quick info -->

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Campaign;
 use App\Models\Phone;
+use App\Models\PhoneBds;
 use App\Models\Transaction;
 use DB;
 use Illuminate\Http\Request;
@@ -89,10 +90,10 @@ class HomeController extends Controller
         }
     }
 
-    public function test()
+    public function scanPhone()
     {
         $arrayPhones = [];
-        for ($i = 1; $i <= 996; $i++) {
+        for ($i = 1; $i <= 900; $i++) {
             if($i == 1){
                 $url = 'https://batdongsan.com.vn/nha-dat-cho-thue-tp-hcm';
             }else{
@@ -113,7 +114,16 @@ class HomeController extends Controller
                 }
             }
         }
-        var_dump($arrayPhones);
+        foreach ($arrayPhones as $item) {
+            $data = new PhoneBds();
+            $data->phone = $item;
+            try {
+                $data->save();
+            } catch (\Exception $e) {
+
+            }
+        }
+
     }
 
     public function cUrl($url)

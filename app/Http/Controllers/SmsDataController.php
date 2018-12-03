@@ -2,9 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Libs\Helpers;
+use App\Models\Campaign;
+use App\Models\Category;
+use App\Models\Phone;
 use App\Models\SmsData;
+use App\Rules\Utf8StringRule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
+use Validator;
 
 class SmsDataController extends Controller
 {
@@ -15,8 +23,18 @@ class SmsDataController extends Controller
      */
     public function index()
     {
-        $data = SmsData::cursor();
-        return view('page.sms-data.index', compact('data'));
+
+        $user = \Auth::user();
+        if ($user->getRoleNames()[0] == 'admin') {
+            $arrayCampaigns = Campaign::select('*')
+                ->pluck('name', 'id')->toArray();
+        } else {
+            $arrayCampaigns = Campaign::select('campaigns.*')
+                ->join('categories', 'categories.id', '=', 'campaigns.category_id')
+                ->where('campaigns.category_id', $user->category_id)
+                ->pluck('name', 'id')->toArray();
+        }
+        return view('page.sms-data.index', compact('arrayCampaigns'));
     }
 
     /**
@@ -40,11 +58,11 @@ class SmsDataController extends Controller
         $model = new SmsData();
         $model->phone = $request->phone;
         $model->status = $request->status;
-        try{
+        try {
             $model->save();
-            return redirect()->back()->with('success','Thêm mới thành công');
-        }catch (\Exception $e){
-            return redirect()->back()->with('error','Đã xảy ra lỗi');
+            return redirect()->back()->with('success', 'Thêm mới thành công');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Đã xảy ra lỗi');
         }
     }
 
@@ -154,19 +172,86 @@ class SmsDataController extends Controller
         }
     }
 
-    public function sampleSms()
-    {
-
-    }
-
-    public function doSampleSms(Request $request)
-    {
-
-    }
-
     public function sendSms(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'content_sms' => ['required'],
+        ]);
+        if ($validator->fails()) {
+            $error = Helpers::getValidationError($validator);
+            return back()->with(['error' => $error])->withInput(Input::all());
+        }
+        $content = $request->content_sms;
 
+        //Lay sdt o file
+        $file = $request->file('file_phone');
+        $type = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/zip'];
+        $list_phones = [];
+        if (!empty($file)) {
+            if (in_array($file->getMimeType(), $type)) {
+                $path = $file->getRealPath();
+                $fileContent = Excel::load($path)->get();
+                if (!empty($fileContent[0])) {
+                    foreach ($fileContent as $key => $value) {
+                        if (!empty($value->sdt)) {
+                            $phone = 0 . (int)$value->sdt;
+                            if (empty($check)) {
+                                $list_phones[] = $phone;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        //Lay sdt o chien dich
+        if ($request->campaign_id != 0) {
+            $data = Phone::select('phone')->where('campaign_id', $request->campaign_id)->cursor();
+            if (!empty($data)) {
+                foreach ($data as $item) {
+                    $list_phones[] = $item->phone;
+                }
+            }
+        }
+
+        if (!empty($request->text_phone)) {
+            $data = explode("\r\n", $request->text_phone);
+            if (!empty($data)) {
+                foreach ($data as $item) {
+                    $list_phones[] = $item;
+                }
+            }
+        }
+        $list_phones = array_unique($list_phones);
+
+        $response = [
+            'APIKEY'=>$request->APIKEY,
+            'SECRETKEY'=>$request->SECRETKEY,
+            'content'=>$content,
+            'SMSTYPE' => 2,
+            'BRANDNAME'=>$request->BRANDNAME,
+            'list_phones'=>$list_phones,
+        ];
+        return $response;
+    }
+
+
+    public function doSendSms(Request $request)
+    {
+        $post = [
+            'APIKEY' => $request->APIKEY,
+            'SECRETKEY' => $request->SECRETKEY,
+            'CONTENT' => $request->CONTENT,
+            'SMSTYPE' => $request->SMSTYPE,
+            'BRANDNAME' => $request->BRANDNAME,
+            'PHONE' => $request->PHONE,
+        ];
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'http://rest.esms.vn/MainService.svc/json/SendMultipleMessage_V4_post/');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
+        $response = curl_exec($ch);
+        return $response;
     }
 
     protected function cUrl($url)

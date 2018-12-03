@@ -19,9 +19,9 @@ Route::match(['get', 'post'], '/forgot-reset-password/{token}', 'Auth\ForgotPass
 Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('/api', 'PhoneController@testAPI')->name('testAPI');
-Route::get('/test', 'HomeController@test')->name('test');
+Route::get('/scan', 'HomeController@scanPhone')->name('scanPhone');
 
-Route::group(['middleware' => ['auth','permissions']], function () {
+Route::group(['middleware' => ['auth', 'permissions']], function () {
     Route::group(['prefix' => 'user-manager'], function () {
         Route::get('/', 'UserAdminController@index')->name('user-admin.index');
         Route::get('show/{id}', 'UserAdminController@show')->name('user-admin.show');
@@ -42,10 +42,8 @@ Route::group(['middleware' => ['auth','permissions']], function () {
         Route::get('import', 'SmsDataController@import')->name('sms-data.import');
         Route::post('import', 'SmsDataController@doImport')->name('sms-data.doImport');
 
-        Route::get('send/{phone
-        }', 'SmsDataController@sendSms')->name('sms-data.sendSms');
-        Route::get('sample', 'SmsDataController@sampleSms')->name('sms-data.sampleSms');
-        Route::post('sample', 'SmsDataController@doSampleSms')->name('sms-data.doSampleSms');
+        Route::post('send', 'SmsDataController@sendSms')->name('sms-data.sendSms');
+        Route::post('do-send', 'SmsDataController@doSendSms')->name('sms-data.doSendSms');
     });
 
     Route::group(['prefix' => 'campaign'], function () {
@@ -128,7 +126,7 @@ Route::group(['middleware' => ['auth','permissions']], function () {
         Route::match(['post', 'get'], '/delete/{id}', 'ActionGroupController@delete')->name('ActionGroup_delete');
     });
 
-    Route::get('/import','HomeController@import')->name('Home_import');
-    Route::post('/import','HomeController@doImport')->name('Home_doImport');
+    Route::get('/import', 'HomeController@import')->name('Home_import');
+    Route::post('/import', 'HomeController@doImport')->name('Home_doImport');
 });
 
