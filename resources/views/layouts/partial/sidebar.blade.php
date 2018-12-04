@@ -38,6 +38,29 @@
                     <li><a href="{{ route('sms-data.index') }}">Gửi SMS</a></li>
                 </ul>
             </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="fa fa-list"></i> Vay Nóng Online <span class="fa fa-chevron-down"></span>
+                </a>
+                <form action="{{route('VayNongOnline.campaign')}}" method="get" id="campaign-vaynong">
+                    <input type="hidden" name="table" value="campaign">
+                </form>
+                <form action="{{route('VayNongOnline.customer')}}" method="get" id="customer-vaynong">
+                    <input type="hidden" name="table" value="customer_details">
+                    <input type="hidden" name="from" value="0">
+                    <input type="hidden" name="to" value="1000">
+                    <input type="hidden" name="where" value="">
+                </form>
+                <ul class="nav child_menu">
+                    <li>
+                        <a href="javascript:void(0)" onclick="$('#campaign-vaynong').submit()">Campaign</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="$('#customer-vaynong').submit()">Customer</a>
+                    </li>
+                </ul>
+
+            </li>
         </ul>
     </div>
 </div>

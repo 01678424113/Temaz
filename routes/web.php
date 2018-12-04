@@ -128,5 +128,11 @@ Route::group(['middleware' => ['auth', 'permissions']], function () {
 
     Route::get('/import', 'HomeController@import')->name('Home_import');
     Route::post('/import', 'HomeController@doImport')->name('Home_doImport');
+
+
+    Route::group(['prefix' => 'vaynongonline'], function () {
+        Route::get('/campaign', 'VayNongOnlineController@campaign')->name('VayNongOnline.campaign');
+        Route::get('/customer', 'VayNongOnlineController@customer')->name('VayNongOnline.customer');
+    });
 });
 
