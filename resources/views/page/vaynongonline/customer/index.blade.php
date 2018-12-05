@@ -39,9 +39,9 @@
                         </div>
                         <div class="col-md-3 col-sm-6 col-xs-12">
                             <select name="to" id="" class="form-control select-to">
-                                <option @if($to == 1000) selected
-                                        @endif value="1000">1000 data mới nhất</option>
-                                <option @if($to != 1000) selected
+                                <option @if($to == 500) selected
+                                        @endif value="500">500 data mới nhất</option>
+                                <option @if($to != 500) selected
                                         @endif value="all">Hiện tất cả</option>
                             </select>
                         </div>
@@ -90,12 +90,12 @@
     <script>
         $('.select-campaign').change(function () {
             $('#search_campaign').submit();
-        })
+        });
         $('.select-to').change(function () {
             $('#search_campaign').submit();
-        })
+        });
         $('.select-address').change(function () {
             $('#search_campaign').submit();
-        })
+        });
     </script>
 @endsection

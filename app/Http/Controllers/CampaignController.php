@@ -142,9 +142,9 @@ class CampaignController extends Controller
             $error = Helpers::getValidationError($validator);
             return back()->with(['error' => $error])->withInput(Input::all());
         }
-
         $model->name = $request->name;
         $model->api = $request->api;
+        $model->sample_sms = isset($request->sample_sms) ? json_encode($request->sample_sms) : '';
         $model->status = isset($request->status) ? Campaign::$ACTIVE : Campaign::$UN_ACTIVE;
         $model->sort_by = $request->sort_by;
         $model->category_id = !empty($request->category_id) ? $request->category_id : 1;
