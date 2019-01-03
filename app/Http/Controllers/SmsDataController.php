@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
 use App\Models\Campaign;
-use App\Models\Category;
 use App\Models\Phone;
+use App\Models\SmsCronjob;
 use App\Models\SmsData;
 use App\Rules\Utf8StringRule;
 use Illuminate\Http\Request;
@@ -172,10 +172,11 @@ class SmsDataController extends Controller
         }
     }
 
-    public function sendSms(Request $request)
+    public function smsCronjob(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'content_sms' => ['required'],
+            'time' => ['required'],
         ]);
         if ($validator->fails()) {
             $error = Helpers::getValidationError($validator);
@@ -223,35 +224,64 @@ class SmsDataController extends Controller
             }
         }
         $list_phones = array_unique($list_phones);
+        $smsCronjob = new SmsCronjob();
+        $smsCronjob->time = $request->time;
+        $smsCronjob->content = $content;
+        $smsCronjob->list_phones = json_encode($list_phones);
+        $smsCronjob->status = SmsCronjob::$ACTIVE;
+        $smsCronjob->created_at = time();
 
-        $response = [
-            'APIKEY'=>$request->APIKEY,
-            'SECRETKEY'=>$request->SECRETKEY,
-            'content'=>$content,
-            'SMSTYPE' => 2,
-            'BRANDNAME'=>$request->BRANDNAME,
-            'list_phones'=>$list_phones,
-        ];
-        return $response;
+        $smsCronjob->save();
+        return redirect()->back()->with('success', 'Đặt lịch thành công');
     }
 
-
-    public function doSendSms(Request $request)
+    public function sendSmsReport(Request $request)
     {
-        $post = [
-            'APIKEY' => $request->APIKEY,
-            'SECRETKEY' => $request->SECRETKEY,
-            'CONTENT' => $request->CONTENT,
-            'SMSTYPE' => $request->SMSTYPE,
-            'BRANDNAME' => $request->BRANDNAME,
-            'PHONE' => $request->PHONE,
-        ];
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'http://rest.esms.vn/MainService.svc/json/SendMultipleMessage_V4_post/');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
-        $response = curl_exec($ch);
-        return $response;
+        $content = $request->CONTENT;
+        $phones = $request->phones;
+        $phone_customer = $request->phone_customer;
+        $content_customer = $request->content_customer;
+        if(!empty($phone_customer)){
+            $sim = $this->checkPhone($phone_customer);
+            if ($sim == 'viettel') {
+                $sim = rand(1, 2);
+            } elseif ($sim == 'vinaphone') {
+                $sim = 3;
+            } elseif ($sim == 'mobiphone') {
+                $sim = 4;
+            }
+            $url = 'http://temaz2018.ddns.net/cgi/WebCGI?1500101=account=apiuser&password=apipass&port=' . $sim . '&destination=' . $phone_customer . '&content=' . urlencode($content_customer);
+            $response = $this->cUrl($url);
+        }
+        if (!empty($phones)) {
+            foreach ($phones as $phone) {
+                $sim = $this->checkPhone($phone);
+                if ($sim == 'viettel') {
+                    $sim = rand(1, 2);
+                } elseif ($sim == 'vinaphone') {
+                    $sim = 3;
+                } elseif ($sim == 'mobiphone') {
+                    $sim = 4;
+                }
+                $url = 'http://temaz2018.ddns.net/cgi/WebCGI?1500101=account=apiuser&password=apipass&port=' . $sim . '&destination=' . $phone . '&content=' . urlencode($content);
+                $response = $this->cUrl($url);
+            }
+        }
+        return 1;
+    }
+
+    protected function checkPhone($phone)
+    {
+        $dauso = substr($phone, 0, 3);
+        if ($dauso == '086' || $dauso == '096' || $dauso == '097' || $dauso == '098' || substr($phone, 0, 2) == '03') {
+            return 'viettel';
+        } elseif ($dauso == '089' || $dauso == '090' || $dauso == '093' || substr($phone, 0, 2) == '07') {
+            return 'mobiphone';
+        } elseif ($dauso == '088' || $dauso == '091' || $dauso == '094' || $dauso == '083' || $dauso == '084' || $dauso == '085' || $dauso == '081' || $dauso == '082') {
+            return 'vinaphone';
+        } else {
+            return 'KXD';
+        }
     }
 
     protected function cUrl($url)

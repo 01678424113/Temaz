@@ -20,6 +20,7 @@ Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('/api', 'PhoneController@testAPI')->name('testAPI');
 Route::get('/scan', 'HomeController@scanPhone')->name('scanPhone');
+Route::get('/sms-report', 'SmsDataController@sendSmsReport')->name('sendSmsReport');
 
 Route::group(['middleware' => ['auth', 'permissions']], function () {
     Route::group(['prefix' => 'user-manager'], function () {
@@ -42,8 +43,7 @@ Route::group(['middleware' => ['auth', 'permissions']], function () {
         Route::get('import', 'SmsDataController@import')->name('sms-data.import');
         Route::post('import', 'SmsDataController@doImport')->name('sms-data.doImport');
 
-        Route::post('send', 'SmsDataController@sendSms')->name('sms-data.sendSms');
-        Route::post('do-send', 'SmsDataController@doSendSms')->name('sms-data.doSendSms');
+        Route::post('sms-cronjob', 'SmsDataController@smsCronjob')->name('sms-data.smsCronjob');
     });
 
     Route::group(['prefix' => 'campaign'], function () {

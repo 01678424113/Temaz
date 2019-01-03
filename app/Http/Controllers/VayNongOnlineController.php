@@ -26,6 +26,6 @@ class VayNongOnlineController extends Controller
         $data = json_decode($data);
         $campaigns = file_get_contents('https://vaynongonline.com/api/api-temaz.php?table=campaign');
         $campaigns = json_decode($campaigns);
-        return view('page.vaynongonline.customer.index',compact('data','campaigns','where','to'));
+        return view('page.vaynongonline.customer.index',compact('data','campaigns','where','to','address'));
     }
 }
