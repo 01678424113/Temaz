@@ -37,12 +37,14 @@ Route::group(['middleware' => ['auth', 'permissions']], function () {
         Route::get('/', 'SmsDataController@index')->name('sms-data.index');
         Route::get('create', 'SmsDataController@create')->name('sms-data.create');
         Route::post('store', 'SmsDataController@store')->name('sms-data.store');
+        Route::get('show/{id}', 'SmsDataController@show')->name('sms-data.show');
         Route::get('{id}/edit', 'SmsDataController@edit')->name('sms-data.edit');
         Route::post('update/{id}', 'SmsDataController@update')->name('sms-data.update');
         Route::get('destroy/{id}', 'SmsDataController@destroy')->name('sms-data.destroy');
         Route::get('import', 'SmsDataController@import')->name('sms-data.import');
         Route::post('import', 'SmsDataController@doImport')->name('sms-data.doImport');
 
+        Route::get('list-cronjob', 'SmsDataController@listCronjob')->name('sms-data.listCronjob');
         Route::post('sms-cronjob', 'SmsDataController@smsCronjob')->name('sms-data.smsCronjob');
     });
 

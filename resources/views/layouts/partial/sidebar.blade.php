@@ -36,6 +36,7 @@
                 </a>
                 <ul class="nav child_menu">
                     <li><a href="{{ route('sms-data.index') }}">Đặt lịch SMS</a></li>
+                    <li><a href="{{ route('sms-data.listCronjob') }}">Danh sách Cronjob</a></li>
                 </ul>
             </li>
             <li>

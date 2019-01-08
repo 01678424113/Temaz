@@ -26,15 +26,12 @@
         <div class="col-md-3 left_col">
             <div class="left_col scroll-view">
                 @include('layouts.partial.header')
-
                 <br/>
-
                 <!-- sidebar menu -->
             @include('layouts.partial.sidebar')
             <!-- /sidebar menu -->
             </div>
         </div>
-
         <!-- top navigation -->
     @include('layouts.partial.top-nav')
     <!-- /top navigation -->

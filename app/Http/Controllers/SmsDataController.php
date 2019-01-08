@@ -74,7 +74,8 @@ class SmsDataController extends Controller
      */
     public function show($id)
     {
-        //
+        $cronjob = SmsCronjob::find($id);
+        return view('page.sms-data.show',compact('cronjob'));
     }
 
     /**
@@ -128,6 +129,12 @@ class SmsDataController extends Controller
         } else {
             return redirect()->back()->with('error', 'Sms data không tồn tại');
         }
+    }
+
+    public function listCronjob()
+    {
+        $data = SmsCronjob::select('id','time','content','status','created_at')->get();
+        return view('page.sms-data.list',compact('data'));
     }
 
     public function import()
@@ -223,6 +230,8 @@ class SmsDataController extends Controller
                 }
             }
         }
+        dd($request->text_phone);
+
         $list_phones = array_unique($list_phones);
         $smsCronjob = new SmsCronjob();
         $smsCronjob->time = $request->time;
@@ -237,10 +246,12 @@ class SmsDataController extends Controller
 
     public function sendSmsReport(Request $request)
     {
-        $content = $request->CONTENT;
-        $phones = $request->phones;
+        $source = $request->source;
         $phone_customer = $request->phone_customer;
+        $content = $request->CONTENT.' Website: '.$source.' SDT: '.$phone_customer;
+        $phones = $request->phones;
         $content_customer = $request->content_customer;
+
         if(!empty($phone_customer)){
             $sim = $this->checkPhone($phone_customer);
             if ($sim == 'viettel') {

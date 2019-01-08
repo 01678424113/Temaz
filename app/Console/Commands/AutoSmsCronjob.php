@@ -38,6 +38,7 @@ class AutoSmsCronjob extends Command
      */
     public function handle()
     {
+        \Log::info('Start cronjob');
         $smsCronjobs = SmsCronjob::where('status', SmsCronjob::$ACTIVE)->get();
         if (!empty($smsCronjobs)) {
             foreach ($smsCronjobs as $smsCronjob) {
