@@ -45,14 +45,19 @@
                                     <td>{{ $value->time }}</td>
                                     <td>
                                         @if($value->status == \App\Models\SmsCronjob::$ACTIVE)
-                                            <label class="label label-info">Đang chạy</label>
+                                            <a href="{{route('sms-data.activeCronjobSMS',['id'=>$value->id])}}"> <label
+                                                        style="cursor: pointer" class="label label-info">Đang chạy</label>
+                                            </a>
                                         @elseif($value->status == \App\Models\SmsCronjob::$UNACTIVE)
-                                            <label class="label label-danger">Không hoạt động</label>
+                                            <a href="{{route('sms-data.activeCronjobSMS',['id'=>$value->id])}}"> <label
+                                                        style="cursor: pointer" class="label label-danger">Không hoạt động</label>
+                                            </a>
                                         @endif
                                     </td>
                                     <td>{{ $value->created_at }}</td>
                                     <td>
-                                        <a href="{{route('sms-data.show',['id'=>$value->id])}}" class="btn btn-xs btn-success"><i
+                                        <a href="{{route('sms-data.show',['id'=>$value->id])}}"
+                                           class="btn btn-xs btn-success"><i
                                                     class="fa fa-eye"></i></a>
                                     </td>
                                 </tr>

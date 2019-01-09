@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         'App\Console\Commands\AutoUpdateData',
         'App\Console\Commands\AutoSmsCronjob',
+        'App\Console\Commands\ScanPhone',
     ];
 
     /**

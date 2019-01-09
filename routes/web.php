@@ -45,6 +45,7 @@ Route::group(['middleware' => ['auth', 'permissions']], function () {
         Route::post('import', 'SmsDataController@doImport')->name('sms-data.doImport');
 
         Route::get('list-cronjob', 'SmsDataController@listCronjob')->name('sms-data.listCronjob');
+        Route::get('active-cronjob/{id}', 'SmsDataController@activeCronjobSMS')->name('sms-data.activeCronjobSMS');
         Route::post('sms-cronjob', 'SmsDataController@smsCronjob')->name('sms-data.smsCronjob');
     });
 

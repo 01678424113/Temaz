@@ -42,14 +42,18 @@ class AutoSmsCronjob extends Command
         $smsCronjobs = SmsCronjob::where('status', SmsCronjob::$ACTIVE)->get();
         if (!empty($smsCronjobs)) {
             foreach ($smsCronjobs as $smsCronjob) {
-                $list_phones = json_decode($smsCronjob->list_phones);
                 if (!empty(json_decode($smsCronjob->list_phones))) {
                     $i = 0;
                     $content = $this->randomContent($smsCronjob->content);
                     foreach (json_decode($smsCronjob->list_phones) as $phone) {
-                        $this->sendSms($phone, $content);
+                        $list_phones = json_decode($smsCronjob->list_phones);
                         unset($list_phones[$i]);
-                        $smsCronjob->list_phones = json_encode($list_phones);
+                        $list_phone_new = [];
+                        foreach ($list_phones as $list_phone) {
+                            $list_phone_new[] = $list_phone;
+                        }
+                        $this->sendSms($phone, $content);
+                        $smsCronjob->list_phones = json_encode($list_phone_new);
                         $smsCronjob->save();
                         if ($i == 4) {
                             break;
@@ -68,7 +72,7 @@ class AutoSmsCronjob extends Command
     {
         $sim = $this->checkPhone($phone);
         if ($sim == 'viettel') {
-            $sim = rand(1,2);
+            $sim = rand(1, 2);
         } elseif ($sim = 'vinaphone') {
             $sim = 3;
         } elseif ($sim = 'mobiphone') {

@@ -75,7 +75,7 @@ class SmsDataController extends Controller
     public function show($id)
     {
         $cronjob = SmsCronjob::find($id);
-        return view('page.sms-data.show',compact('cronjob'));
+        return view('page.sms-data.show', compact('cronjob'));
     }
 
     /**
@@ -133,8 +133,20 @@ class SmsDataController extends Controller
 
     public function listCronjob()
     {
-        $data = SmsCronjob::select('id','time','content','status','created_at')->get();
-        return view('page.sms-data.list',compact('data'));
+        $data = SmsCronjob::select('id', 'time', 'content', 'status', 'created_at')->get();
+        return view('page.sms-data.list', compact('data'));
+    }
+
+    public function activeCronjobSMS($id)
+    {
+        $cronjobSMS = SmsCronjob::find($id);
+        if ($cronjobSMS->status == SmsCronjob::$UNACTIVE) {
+            $cronjobSMS->status = SmsCronjob::$ACTIVE;
+        } else {
+            $cronjobSMS->status = SmsCronjob::$UNACTIVE;
+        }
+        $cronjobSMS->save();
+        return redirect()->back()->with('success', 'Cập nhập thành công');
     }
 
     public function import()
@@ -230,8 +242,6 @@ class SmsDataController extends Controller
                 }
             }
         }
-        dd($request->text_phone);
-
         $list_phones = array_unique($list_phones);
         $smsCronjob = new SmsCronjob();
         $smsCronjob->time = $request->time;
@@ -248,11 +258,11 @@ class SmsDataController extends Controller
     {
         $source = $request->source;
         $phone_customer = $request->phone_customer;
-        $content = $request->CONTENT.' Website: '.$source.' SDT: '.$phone_customer;
+        $content = $request->CONTENT . ' Website: ' . $source . ' SDT: ' . $phone_customer;
         $phones = $request->phones;
         $content_customer = $request->content_customer;
 
-        if(!empty($phone_customer)){
+        if (!empty($phone_customer)) {
             $sim = $this->checkPhone($phone_customer);
             if ($sim == 'viettel') {
                 $sim = rand(1, 2);
