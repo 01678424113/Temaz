@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Phone;
 use Illuminate\Console\Command;
 use App\Models\SmsCronjob;
 
@@ -53,6 +54,20 @@ class AutoSmsCronjob extends Command
                             $list_phone_new[] = $list_phone;
                         }
                         $this->sendSms($phone, $content);
+                        //Save history phone
+                        $check = Phone::where('phone', $phone)->first();
+                        if (empty($check)) {
+                            $newPhone = new Phone();
+                            $newPhone->phone = $phone;
+                            $newPhone->cronjob_id = $smsCronjob->id;
+                            $newPhone->count_send_sms = 1;
+                            $newPhone->created_at = date('Y-m-d H:i:s');
+                            $newPhone->save();
+                        } else {
+                            $check->cronjob_id = $smsCronjob->id;
+                            $check->count_send_sms = $check->count_send_sms + 1;
+                            $check->save();
+                        }
                         $smsCronjob->list_phones = json_encode($list_phone_new);
                         $smsCronjob->save();
                         if ($i == 4) {

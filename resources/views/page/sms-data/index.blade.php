@@ -29,15 +29,23 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-12">
+
+                                    <div class="col-md-12" style="margin-bottom: 10px">
                                         <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Thời gian
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">
+                                                Thời gian:
                                             </label>
-                                            <div class="col-md-9 col-sm-6 col-xs-12 form-group has-feedback">
-                                                <input type="number" name="time" class="form-control">
+                                            <div class=" col-md-9 col-sm-9 col-xs-12">
+                                                <select class="form-control" name="time" id="">
+                                                    <option value="1">1</option>
+                                                    <option value="5">5</option>
+                                                    <option value="10">10</option>
+                                                    <option value="30">10</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for=""></label>

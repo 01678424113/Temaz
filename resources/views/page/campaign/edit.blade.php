@@ -33,12 +33,6 @@
                                                     'value' =>$campaign->name,
                                                 ])
                                                 @include('layouts.components.form-html.input-text', [
-                                               'label' => 'API',
-                                               'name' => 'api',
-                                               'is_required' => false,
-                                               'value' => $campaign->api
-                                           ])
-                                                @include('layouts.components.form-html.input-text', [
                                                   'label' => 'Sắp xếp',
                                                   'name' => 'sort_by',
                                                   'is_required' => false,

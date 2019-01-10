@@ -19,11 +19,8 @@
                         <tr>
                             <th>STT</th>
                             <th>Số điện thoại</th>
-                            <th>Danh mục</th>
-                            <th>Nguồn</th>
-                            <th>Thời gian</th>
-                            <th>Thời gian import</th>
-                            <th>Link</th>
+                            <th>Chiến dịch</th>
+                            <th>Crojob ID</th>
                             <th>Hành động</th>
                         </tr>
                         </thead>
@@ -33,15 +30,14 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $value->phone }}</td>
-                                    <td>{{ $value->category_name }}</td>
-                                    <td>{{ $value->source }}</td>
-                                    <td>{{ $value->time }}</td>
-                                    <td>{{ $value->time_import }}</td>
-                                    <td><a target="_blank" href="{{$value->link}}">Click</a></td>
+                                    <td>{{ $value->campaign_id }}</td>
+                                    <td>{{ $value->cronjob_id }}</td>
                                     <td>
-                                        <a href="{{route('phone.edit',['id'=>$value->id])}}" class="btn btn-xs btn-info"><i
+                                        <a href="{{route('phone.edit',['id'=>$value->id])}}"
+                                           class="btn btn-xs btn-info"><i
                                                     class="fa fa-edit"></i></a>
-                                        <a href="{{route('phone.destroy',['id'=>$value->id])}}" class="btn btn-xs btn-danger"><i
+                                        <a href="{{route('phone.destroy',['id'=>$value->id])}}"
+                                           class="btn btn-xs btn-danger"><i
                                                     class="fa fa-times"></i></a>
                                     </td>
                                 </tr>

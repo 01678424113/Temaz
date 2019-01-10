@@ -23,7 +23,6 @@ class SmsDataController extends Controller
      */
     public function index()
     {
-
         $user = \Auth::user();
         if ($user->getRoleNames()[0] == 'admin') {
             $arrayCampaigns = Campaign::select('*')
@@ -202,7 +201,6 @@ class SmsDataController extends Controller
             return back()->with(['error' => $error])->withInput(Input::all());
         }
         $content = $request->content_sms;
-
         //Lay sdt o file
         $file = $request->file('file_phone');
         $type = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/zip'];
@@ -242,10 +240,10 @@ class SmsDataController extends Controller
                 }
             }
         }
-        $list_phones = array_unique($list_phones);
         $smsCronjob = new SmsCronjob();
         $smsCronjob->time = $request->time;
         $smsCronjob->content = $content;
+        $smsCronjob->campaign_id = $request->campaign_id;
         $smsCronjob->list_phones = json_encode($list_phones);
         $smsCronjob->status = SmsCronjob::$ACTIVE;
         $smsCronjob->created_at = time();
@@ -258,7 +256,8 @@ class SmsDataController extends Controller
     {
         $source = $request->source;
         $phone_customer = $request->phone_customer;
-        $content = $request->CONTENT . ' Website: ' . $source . ' SDT: ' . $phone_customer;
+        $name_customer = $request->name_customer;
+        $content = $request->CONTENT . ' Website: ' . $source .' Tên: '.$name_customer. ' SDT: ' . $phone_customer;
         $phones = $request->phones;
         $content_customer = $request->content_customer;
 
