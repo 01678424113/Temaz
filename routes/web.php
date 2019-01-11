@@ -41,12 +41,22 @@ Route::group(['middleware' => ['auth', 'permissions']], function () {
         Route::get('{id}/edit', 'SmsDataController@edit')->name('sms-data.edit');
         Route::post('update/{id}', 'SmsDataController@update')->name('sms-data.update');
         Route::get('destroy/{id}', 'SmsDataController@destroy')->name('sms-data.destroy');
-        Route::get('import', 'SmsDataController@import')->name('sms-data.import');
-        Route::post('import', 'SmsDataController@doImport')->name('sms-data.doImport');
+    });
 
-        Route::get('list-cronjob', 'SmsDataController@listCronjob')->name('sms-data.listCronjob');
-        Route::get('active-cronjob/{id}', 'SmsDataController@activeCronjobSMS')->name('sms-data.activeCronjobSMS');
-        Route::post('sms-cronjob', 'SmsDataController@smsCronjob')->name('sms-data.smsCronjob');
+    Route::group(['prefix' => 'sms-cronjob'], function () {
+        Route::get('/', 'SmsCronjobController@index')->name('sms-cronjob.index');
+        Route::get('create', 'SmsCronjobController@create')->name('sms-cronjob.create');
+        Route::post('store', 'SmsCronjobController@store')->name('sms-cronjob.store');
+        Route::get('show/{id}', 'SmsCronjobController@show')->name('sms-cronjob.show');
+        Route::get('{id}/edit', 'SmsCronjobController@edit')->name('sms-cronjob.edit');
+        Route::post('update/{id}', 'SmsCronjobController@update')->name('sms-cronjob.update');
+        Route::get('destroy/{id}', 'SmsCronjobController@destroy')->name('sms-cronjob.destroy');
+        Route::get('import', 'SmsCronjobController@import')->name('sms-cronjob.import');
+        Route::post('import', 'SmsCronjobController@doImport')->name('sms-cronjob.doImport');
+
+        Route::get('list-cronjob', 'SmsCronjobController@listCronjob')->name('sms-cronjob.listCronjob');
+        Route::get('active-cronjob/{id}', 'SmsCronjobController@activeCronjobSMS')->name('sms-cronjob.activeCronjobSMS');
+        Route::post('sms-cronjob', 'SmsCronjobController@smsCronjob')->name('sms-cronjob.smsCronjob');
     });
 
     Route::group(['prefix' => 'campaign'], function () {

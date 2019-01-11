@@ -12,7 +12,7 @@ class ScanPhone extends Command
      *
      * @var string
      */
-    protected $signature = 'auto:scanPhone';
+    protected $signature = 'auto:scanPhone {code}';
 
     /**
      * The console command description.
@@ -38,10 +38,15 @@ class ScanPhone extends Command
      */
     public function handle()
     {
+        $code = $this->argument('code');
+        if ($code == 100000) {
+            $address = 'Hà Nội';
+            $link = 'https://ha-noi.congtydoanhnghiep.com/quan-cau-giay/trang-';
+        }
         $links = [];
-        for ($p = 1; $p < 200; $p++) {
+        for ($p = 750; $p < 1000; $p++) {
             echo $p;
-            $html = $this->cUrl('https://ha-noi.congtydoanhnghiep.com/quan-ha-dong/trang-' . $p);
+            $html = $this->cUrl($link . $p);
             preg_match_all('/<h4><a
                  href=\"(.*?)\">.*?<\/a><\/h4>/', $html, $result);
             $find = $result[1];
@@ -49,23 +54,33 @@ class ScanPhone extends Command
         }
 
         $i = 1;
+        $count_phone = 0;
         foreach ($links as $link) {
             echo $i;
             $html = $this->cUrl($link);
             preg_match_all('/<th>Điện thoại\:<\/th><td>(.*?)<\/td>/', $html, $result);
             preg_match_all('/<th class=\"w128\">Tên công ty: <\/th><td>(.*?)<\/td>/', $html, $nameCompany);
             if (isset($result) && !empty($result[1])) {
-                $phone = new Phone();
-                $phone->phone = str_replace(' ','',$result[1][0]);
-                $phone->name_company = $nameCompany[1][0];
-                try {
-                    $phone->save();
-                } catch (\Exception $e) {
+                $check = substr($result[1][0], 0, 2);
+                if ($check != '02' || $check != '04' || strlen($result[1][0]) > 11) {
+                    $check = Phone::where('phone', $result[1][0])->first();
+                    if (empty($check)) {
+                        $phone = new Phone();
+                        $phone_number = str_replace(' ', '', $result[1][0]);
+                        $phone->phone = $this->changePhone($phone_number);
+                        $phone->name_company = $nameCompany[1][0];
+                        $phone->address = $address;
+                        try {
+                            $phone->save();
+                            $count_phone++;
+                        } catch (\Exception $e) {
+                        }
+                    }
                 }
             }
             $i++;
         }
-        echo 'Done';
+        echo 'Done ' . $count_phone . ' SDT';
     }
 
     public function cUrl($url)
@@ -97,5 +112,37 @@ class ScanPhone extends Command
         $header['errmsg'] = $errmsg;
         $header['content'] = $content;
         return $content;
+    }
+
+    protected function changePhone($phone)
+    {
+        $firstNumber = substr($phone, 0, 4);
+        $array = [
+            '0120' => '070',
+            '0121' => '079',
+            '0122' => '077',
+            '0126' => '076',
+            '0128' => '078',
+            '0123' => '083',
+            '0124' => '084',
+            '0125' => '085',
+            '0127' => '081',
+            '0129' => '082',
+            '0162' => '032',
+            '0163' => '033',
+            '0164' => '034',
+            '0165' => '035',
+            '0166' => '036',
+            '0167' => '037',
+            '0168' => '038',
+            '0169' => '039',
+            '0186' => '056',
+            '0188' => '058',
+            '0199' => '059',
+        ];
+        if (isset($array[$firstNumber])) {
+            $phone = str_replace($firstNumber, $array[$firstNumber], $phone);
+        }
+        return $phone;
     }
 }

@@ -35,8 +35,8 @@
                     <i class="fa fa-list"></i> SMS <span class="fa fa-chevron-down"></span>
                 </a>
                 <ul class="nav child_menu">
-                    <li><a href="{{ route('sms-data.index') }}">Đặt lịch SMS</a></li>
-                    <li><a href="{{ route('sms-data.listCronjob') }}">Danh sách Cronjob</a></li>
+                    <li><a href="{{ route('sms-cronjob.create') }}">Đặt lịch SMS</a></li>
+                    <li><a href="{{ route('sms-cronjob.index') }}">Danh sách Cronjob</a></li>
                 </ul>
             </li>
             <li>
