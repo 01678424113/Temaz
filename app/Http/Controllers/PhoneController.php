@@ -27,9 +27,8 @@ class PhoneController extends Controller
     public function index()
     {
 
-        $data = Phone::select('phones.*', 'categories.name as category_name')
-            ->join('categories', 'categories.id', '=', 'phones.category_id')
-            ->orderBy('phones.time_import', 'DESC')
+        $data = Phone::select('id', 'cronjob_id','phone', 'campaign_id')
+            ->orderBy('created_at', 'DESC')
             ->cursor();
         return view('page.phone.index', compact('data'));
     }

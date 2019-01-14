@@ -21,6 +21,16 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Tên
+                                            </label>
+                                            <div class="col-md-9 col-sm-6 col-xs-12 form-group has-feedback">
+                                                <input type="text" class="form-control" name="name">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Nội dung
                                             </label>
                                             <div class="col-md-9 col-sm-6 col-xs-12 form-group has-feedback">

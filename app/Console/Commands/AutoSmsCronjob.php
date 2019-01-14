@@ -57,12 +57,16 @@ class AutoSmsCronjob extends Command
                         //Save history phone
                         $check = Phone::where('phone', $phone)->first();
                         if (empty($check)) {
-                            $newPhone = new Phone();
-                            $newPhone->phone = $phone;
-                            $newPhone->cronjob_id = $smsCronjob->id;
-                            $newPhone->count_send_sms = 1;
-                            $newPhone->created_at = date('Y-m-d H:i:s');
-                            $newPhone->save();
+                            try{
+                                $newPhone = new Phone();
+                                $newPhone->phone = $phone;
+                                $newPhone->cronjob_id = $smsCronjob->id;
+                                $newPhone->count_send_sms = 1;
+                                $newPhone->created_at = date('Y-m-d H:i:s');
+                                $newPhone->save();
+                            }catch (\Exception $e){
+                                continue;
+                            }
                         } else {
                             $check->cronjob_id = $smsCronjob->id;
                             $check->count_send_sms = $check->count_send_sms + 1;
@@ -93,8 +97,11 @@ class AutoSmsCronjob extends Command
         } elseif ($sim = 'mobiphone') {
             $sim = 4;
         }
+        if($sim == 'KXD'){
+            return 'Error';
+        }
         echo $sim;
-        $url = 'http://temaz2018.ddns.net/cgi/WebCGI?1500101=account=apiuser&password=apipass&port=' . $sim . '&destination=' . $phone . '&content=' . urlencode($content);
+        $url = 'http://temazsms.ddns.net/cgi/WebCGI?1500101=account=apiuser&password=apipass&port=' . $sim . '&destination=' . $phone . '&content=' . urlencode($content);
         $response = $this->cUrl($url);
         return $response;
     }

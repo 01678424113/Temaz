@@ -21,7 +21,7 @@ class SmsCronjobController extends Controller
      */
     public function index()
     {
-        $data = SmsCronjob::select('id', 'time', 'content', 'status', 'created_at')->get();
+        $data = SmsCronjob::select('id', 'time', 'content', 'status', 'created_at','name')->get();
         return view('page.sms-cronjob.index', compact('data'));
     }
 
@@ -204,6 +204,7 @@ class SmsCronjobController extends Controller
         }
         $smsCronjob = new SmsCronjob();
         $smsCronjob->time = $request->time;
+        $smsCronjob->name = $request->name;
         $smsCronjob->content = $content;
         $smsCronjob->campaign_id = $request->campaign_id;
         $smsCronjob->list_phones = json_encode($list_phones);

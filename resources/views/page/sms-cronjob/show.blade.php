@@ -54,23 +54,24 @@
                                 <div class="row">
                                     <div class="col-md-12" style="margin-top: 15px;">
                                         <div class="form-group">
+                                            <?php
+                                            $list_phones = json_decode($cronjob->list_phones);
+                                            $i = 1;
+                                            $text = '';
+                                            $list_phones = array_unique($list_phones);
+                                            foreach ($list_phones as $phone) {
+                                                if ($i == 1) {
+                                                    $text = $phone;
+                                                } else {
+                                                    $text = $text . '</br>' . $phone;
+                                                }
+                                                $i++;
+                                            }
+                                            ?>
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">
-                                                Danh sách:
+                                                Danh sách ({{count($list_phones)}}):
                                             </label>
                                             <div class=" col-md-9 col-sm-9 col-xs-12">
-                                                <?php
-                                                $list_phones = json_decode($cronjob->list_phones);
-                                                $i = 1;
-                                                $text = '';
-                                                foreach ($list_phones as $phone) {
-                                                    if ($i == 1) {
-                                                        $text = $phone;
-                                                    } else {
-                                                        $text = $text . '</br>' . $phone;
-                                                    }
-                                                    $i++;
-                                                }
-                                                ?>
                                                 {!! $text !!}
                                             </div>
                                         </div>
