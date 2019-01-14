@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Models\Phone;
+use App\Models\Sim;
+use DB;
 use Illuminate\Console\Command;
 use App\Models\SmsCronjob;
 
@@ -40,7 +42,7 @@ class AutoSmsCronjob extends Command
     public function handle()
     {
         \Log::info('Start cronjob');
-        $smsCronjobs = SmsCronjob::where('status', SmsCronjob::$ACTIVE)->get();
+        $smsCronjobs = SmsCronjob::where('status', SmsCronjob::$ACTIVE)->first();
         if (!empty($smsCronjobs)) {
             foreach ($smsCronjobs as $smsCronjob) {
                 if (!empty(json_decode($smsCronjob->list_phones))) {
@@ -89,21 +91,37 @@ class AutoSmsCronjob extends Command
 
     protected function sendSms($phone, $content)
     {
-        $sim = $this->checkPhone($phone);
-        if ($sim == 'viettel') {
-            $sim = rand(1, 2);
-        } elseif ($sim = 'vinaphone') {
-            $sim = 3;
-        } elseif ($sim = 'mobiphone') {
-            $sim = 4;
+        $network = $this->checkPhone($phone);
+
+        if ($network == 'viettel') {
+            $query_sim = Sim::where('network',$network)->where('status',0)->first();
+            if(!isset($query_sim)){
+                DB::table('sims')->where('network', $network)->update(['status' => 0]);
+                $query_sim = Sim::where('network',$network)->where('status',0)->first();
+                $sim = $query_sim->post;
+            }else{
+                $sim = $query_sim->post;
+            }
+        } elseif ($network = 'vinaphone') {
+            $query_sim = Sim::where('network',$network)->first();
+            $sim = $query_sim->post;
+        } elseif ($network = 'mobiphone') {
+            $query_sim = Sim::where('network',$network)->first();
+            $sim = $query_sim->post;
         }
         if($sim == 'KXD'){
             return 'Error';
         }
+        if($query_sim->status == 1){
+            $query_sim->status = 0;
+        }else{
+            $query_sim->status = 1;
+        }
+        $query_sim->save();
         echo $sim;
         $url = 'http://temazsms.ddns.net/cgi/WebCGI?1500101=account=apiuser&password=apipass&port=' . $sim . '&destination=' . $phone . '&content=' . urlencode($content);
         $response = $this->cUrl($url);
-        return $response;
+        return 1;
     }
 
     protected function checkPhone($phone)

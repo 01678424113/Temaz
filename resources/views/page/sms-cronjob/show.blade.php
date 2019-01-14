@@ -12,13 +12,22 @@
                     </ul>
                     <div class="clearfix"></div>
                 </div>
-                <form action="{{route('sms-cronjob.smsCronjob')}}" method="post" enctype="multipart/form-data"
+                <form action="{{route('sms-cronjob.update',['id'=>$cronjob->id])}}" method="post" enctype="multipart/form-data"
                       id="form-send-sms">
                     @csrf
                     <div class="x_content">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Tên</label>
+                                            <div class="col-md-9 col-sm-6 col-xs-12 form-group has-feedback">
+                                                <input type="text" name="name" value="{{$cronjob->name}}"
+                                                       class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Nội dung
@@ -44,7 +53,7 @@
                                         <div class="form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for=""></label>
                                             <div class="col-md-9 col-sm-6 col-xs-12 form-group has-feedback">
-                                                <button class="btn btn-success btn-send" type="submit">Đặt lịch</button>
+                                                <button class="btn btn-success btn-send" type="submit">Lưu</button>
                                             </div>
                                         </div>
                                     </div>

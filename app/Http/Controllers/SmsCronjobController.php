@@ -86,6 +86,15 @@ class SmsCronjobController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $cronjob = SmsCronjob::find($id);
+        if(isset($cronjob)){
+            $cronjob->name = $request->name;
+            $cronjob->content = $request->content_sms;
+            $cronjob->save();
+            return redirect()->back()->with('success','Lưu thành công');
+        }else{
+            return redirect()->back()->with('error','Cronjob không tồn tại');
+        }
     }
 
     /**
