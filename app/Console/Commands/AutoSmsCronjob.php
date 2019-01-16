@@ -42,7 +42,7 @@ class AutoSmsCronjob extends Command
     public function handle()
     {
         \Log::info('Start cronjob');
-        $smsCronjobs = SmsCronjob::where('status', SmsCronjob::$ACTIVE)->first();
+        $smsCronjobs = SmsCronjob::where('status', SmsCronjob::$ACTIVE)->get();
         if (!empty($smsCronjobs)) {
             foreach ($smsCronjobs as $smsCronjob) {
                 if (!empty(json_decode($smsCronjob->list_phones))) {
@@ -50,29 +50,13 @@ class AutoSmsCronjob extends Command
                     $content = $this->randomContent($smsCronjob->content);
                     foreach (json_decode($smsCronjob->list_phones) as $phone) {
                         $list_phones = json_decode($smsCronjob->list_phones);
+                        if(strlen($list_phones[$i]) > 9 || strlen($list_phones[$i]) < 12){
+                            $this->sendSms($phone, $content, $smsCronjob->id);
+                        }
                         unset($list_phones[$i]);
                         $list_phone_new = [];
                         foreach ($list_phones as $list_phone) {
                             $list_phone_new[] = $list_phone;
-                        }
-                        $this->sendSms($phone, $content);
-                        //Save history phone
-                        $check = Phone::where('phone', $phone)->first();
-                        if (empty($check)) {
-                            try{
-                                $newPhone = new Phone();
-                                $newPhone->phone = $phone;
-                                $newPhone->cronjob_id = $smsCronjob->id;
-                                $newPhone->count_send_sms = 1;
-                                $newPhone->created_at = date('Y-m-d H:i:s');
-                                $newPhone->save();
-                            }catch (\Exception $e){
-                                continue;
-                            }
-                        } else {
-                            $check->cronjob_id = $smsCronjob->id;
-                            $check->count_send_sms = $check->count_send_sms + 1;
-                            $check->save();
                         }
                         $smsCronjob->list_phones = json_encode($list_phone_new);
                         $smsCronjob->save();
@@ -89,38 +73,68 @@ class AutoSmsCronjob extends Command
         }
     }
 
-    protected function sendSms($phone, $content)
+    protected function sendSms($phone, $content, $cronjob_id)
     {
         $network = $this->checkPhone($phone);
 
         if ($network == 'viettel') {
-            $query_sim = Sim::where('network',$network)->where('status',0)->first();
-            if(!isset($query_sim)){
+            $query_sim = Sim::where('network', $network)->where('status', 0)->first();
+            if (!isset($query_sim)) {
                 DB::table('sims')->where('network', $network)->update(['status' => 0]);
-                $query_sim = Sim::where('network',$network)->where('status',0)->first();
+                $query_sim = Sim::where('network', $network)->where('status', 0)->first();
                 $sim = $query_sim->post;
-            }else{
+            } else {
                 $sim = $query_sim->post;
             }
         } elseif ($network = 'vinaphone') {
-            $query_sim = Sim::where('network',$network)->first();
+            $query_sim = Sim::where('network', $network)->first();
             $sim = $query_sim->post;
         } elseif ($network = 'mobiphone') {
-            $query_sim = Sim::where('network',$network)->first();
+            $query_sim = Sim::where('network', $network)->first();
             $sim = $query_sim->post;
         }
-        if($sim == 'KXD'){
+        if ($sim == 'KXD') {
             return 'Error';
         }
-        if($query_sim->status == 1){
+        if ($query_sim->status == 1) {
             $query_sim->status = 0;
-        }else{
+        } else {
             $query_sim->status = 1;
         }
         $query_sim->save();
         echo $sim;
         $url = 'http://temazsms.ddns.net/cgi/WebCGI?1500101=account=apiuser&password=apipass&port=' . $sim . '&destination=' . $phone . '&content=' . urlencode($content);
         $response = $this->cUrl($url);
+        //Save history phone
+        preg_match_all('/.*?Response\: Success.*?/', $response, $status);
+        if (isset($status[0][0]) && $status[0][0] == 'Response: Success') {
+            $status = 1;
+        } else {
+            $status = 0;
+        }
+        $check = Phone::where('phone', $phone)->first();
+        if (empty($check)) {
+            try {
+                $newPhone = new Phone();
+                $newPhone->phone = $phone;
+                $newPhone->cronjob_id = $cronjob_id;
+                $newPhone->count_send_sms = 1;
+                if ($status == 1) {
+                    $newPhone->send_success = $newPhone->send_success + 1;
+                } else {
+                    $newPhone->send_error = $newPhone->send_error + 1;
+                }
+                $newPhone->created_at = date('Y-m-d H:i:s');
+                $newPhone->save();
+            } catch (\Exception $e) {
+
+            }
+        } else {
+            $check->cronjob_id = $cronjob_id;
+            $check->count_send_sms = $check->count_send_sms + 1;
+            $check->save();
+        }
+
         return 1;
     }
 
