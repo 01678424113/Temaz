@@ -33,16 +33,6 @@ Route::group(['middleware' => ['auth', 'permissions']], function () {
         Route::get('destroy/{id}', 'UserAdminController@destroy')->name('user-admin.destroy');
     });
 
-    Route::group(['prefix' => 'sms-data'], function () {
-        Route::get('/', 'SmsDataController@index')->name('sms-data.index');
-        Route::get('create', 'SmsDataController@create')->name('sms-data.create');
-        Route::post('store', 'SmsDataController@store')->name('sms-data.store');
-        Route::get('show/{id}', 'SmsDataController@show')->name('sms-data.show');
-        Route::get('{id}/edit', 'SmsDataController@edit')->name('sms-data.edit');
-        Route::post('update/{id}', 'SmsDataController@update')->name('sms-data.update');
-        Route::get('destroy/{id}', 'SmsDataController@destroy')->name('sms-data.destroy');
-    });
-
     Route::group(['prefix' => 'sms-cronjob'], function () {
         Route::get('/', 'SmsCronjobController@index')->name('sms-cronjob.index');
         Route::get('create', 'SmsCronjobController@create')->name('sms-cronjob.create');
@@ -67,6 +57,16 @@ Route::group(['middleware' => ['auth', 'permissions']], function () {
         Route::get('{id}/edit', 'CampaignController@edit')->name('campaign.edit');
         Route::post('update/{id}', 'CampaignController@update')->name('campaign.update');
         Route::get('destroy/{id}', 'CampaignController@destroy')->name('campaign.destroy');
+    });
+
+    Route::group(['prefix' => 'sms-content'], function () {
+        Route::get('/', 'SmsContentController@index')->name('sms-content.index');
+        Route::get('show/{id}', 'SmsContentController@show')->name('sms-content.show');
+        Route::get('create', 'SmsContentController@create')->name('sms-content.create');
+        Route::post('store', 'SmsContentController@store')->name('sms-content.store');
+        Route::get('{id}/edit', 'SmsContentController@edit')->name('sms-content.edit');
+        Route::post('update/{id}', 'SmsContentController@update')->name('sms-content.update');
+        Route::get('destroy/{id}', 'SmsContentController@destroy')->name('sms-content.destroy');
     });
 
     Route::group(['prefix' => 'phone'], function () {

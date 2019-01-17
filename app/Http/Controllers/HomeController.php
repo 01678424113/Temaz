@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Campaign;
 use App\Models\Phone;
 use App\Models\PhoneBds;
-use App\Models\Transaction;
-use DB;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -94,10 +92,10 @@ class HomeController extends Controller
     {
         $arrayPhones = [];
         for ($i = 1; $i <= 900; $i++) {
-            if($i == 1){
+            if ($i == 1) {
                 $url = 'https://batdongsan.com.vn/nha-dat-cho-thue-tp-hcm';
-            }else{
-                $url = 'https://batdongsan.com.vn/nha-dat-cho-thue-tp-hcm/p'.$i;
+            } else {
+                $url = 'https://batdongsan.com.vn/nha-dat-cho-thue-tp-hcm/p' . $i;
             }
             $text = $this->cUrl($url);
             $matches = array();

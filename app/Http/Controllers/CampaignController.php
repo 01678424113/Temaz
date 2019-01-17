@@ -7,6 +7,7 @@ use App\Models\Admin;
 use App\Models\Campaign;
 use App\Models\Category;
 use App\Models\Phone;
+use App\Models\SmsContent;
 use App\Rules\Utf8StringRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -86,6 +87,14 @@ class CampaignController extends Controller
         $model->category_id = !empty($request->category_id) ? $request->category_id : 1;
         $flag = $model->save();
 
+        if(isset($request->sample_sms)){
+            foreach ($request->sample_sms as $sample_sms){
+                $new_content = new SmsContent();
+                $new_content->content = $sample_sms;
+                $new_content->campaign_id = $model->id;
+                $new_content->save();
+            }
+        }
         if ($flag) {
             return redirect()->route('campaign.create')->with('success', 'Tạo chiến dịch thành công');
         }
@@ -117,9 +126,10 @@ class CampaignController extends Controller
      */
     public function edit($id)
     {
+        $smsContents = SmsContent::where('campaign_id',$id)->get();
         $arrayCategories = Category::where('parent_id', 0)->pluck('name', 'id')->toArray();
         $campaign = Campaign::find($id);
-        return view('page.campaign.edit', compact('arrayCategories', 'campaign'));
+        return view('page.campaign.edit', compact('arrayCategories', 'campaign','smsContents'));
     }
 
     /**
@@ -147,6 +157,16 @@ class CampaignController extends Controller
         $model->sort_by = $request->sort_by;
         $model->category_id = !empty($request->category_id) ? $request->category_id : 1;
         $flag = $model->save();
+
+        if(isset($request->sample_sms)){
+            $sample_smss = json_encode($request->sample_sms);
+            foreach ($sample_smss as $sample_sms){
+                $new_content = new SmsContent();
+                $new_content->content = $sample_sms;
+                $new_content->campaign_id = $id;
+                $new_content->save();
+            }
+        }
 
         if ($flag) {
             return redirect()->route('campaign.edit', $id)->with('success', 'Cập nhật chiến dịch thành công');

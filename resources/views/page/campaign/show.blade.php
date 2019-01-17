@@ -45,7 +45,6 @@
                                           id="data-{{$value->id}}" method="post">
                                         @csrf
                                         <td>
-
                                             <textarea name="note" id="" cols="30" class="form-control" rows="10"
                                                       onblur="changeNote({{$value->id}})"
                                                       style="width: 100%">{{$value->note}}</textarea>

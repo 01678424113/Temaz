@@ -27,7 +27,7 @@
                                         <div class="row">
                                             <div class="col-md-6 col-sm-12 col-xs-12">
                                                 @include('layouts.components.form-html.input-text', [
-                                                    'label' => 'Tên quyền',
+                                                    'label' => 'Hành động',
                                                     'name' => 'name',
                                                     'is_required' => true,
                                                     'value' =>$model->name,
@@ -35,7 +35,7 @@
                                             </div>
                                             <div class="col-md-6 col-sm-12 col-xs-12">
                                                 @include('layouts.components.form-html.input-text', [
-                                                    'label' => 'Tên chức năng',
+                                                    'label' => 'Chức năng',
                                                     'name' => 'note',
                                                     'is_required' => true,
                                                     'value' =>$model->note,

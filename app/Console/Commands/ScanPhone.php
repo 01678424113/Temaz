@@ -41,18 +41,16 @@ class ScanPhone extends Command
         $code = $this->argument('code');
         if ($code == 100000) {
             $address = 'Hà Nội';
-            $link = 'https://ha-noi.congtydoanhnghiep.com/quan-cau-giay/trang-';
+            $link = 'https://ha-noi.congtydoanhnghiep.com/trang-';
         }
         $links = [];
         for ($p = 750; $p < 751; $p++) {
             echo $p;
             $html = $this->cUrl($link . $p);
-            preg_match_all('/<h4><a
-                 href=\"(.*?)\">.*?<\/a><\/h4>/', $html, $result);
+            preg_match_all('/<h2><a href=\"(.*?)\">.*?<\/a><\/h2>/', $html, $result);
             $find = $result[1];
             $links = array_merge($links, $find);
         }
-
         $i = 1;
         $count_phone = 0;
         foreach ($links as $link) {
@@ -62,9 +60,9 @@ class ScanPhone extends Command
             preg_match_all('/<th class=\"w128\">Tên công ty: <\/th><td>(.*?)<\/td>/', $html, $nameCompany);
             if (isset($result) && !empty($result[1])) {
                 $str_phone = $result[1][0];
-                $str_phone = str_replace('.','',$str_phone);
-                $str_phone = str_replace(' ','',$str_phone);
-                $str_phone = str_replace('/','',$str_phone);
+                $str_phone = str_replace('.', '', $str_phone);
+                $str_phone = str_replace(' ', '', $str_phone);
+                $str_phone = str_replace('/', '', $str_phone);
                 $check = substr($str_phone, 0, 2);
                 if ($check != '02' && $check != '04' && $check != '84' && strlen($str_phone) > 11) {
                     $check = Phone::where('phone', $str_phone)->first();
