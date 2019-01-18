@@ -6,10 +6,9 @@ use App\Libs\Helpers;
 use App\Models\Campaign;
 use App\Models\Phone;
 use App\Models\SmsCronjob;
-use App\Models\SmsData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-use Maatwebsite\Excel\Facades\Excel;
+use Excel;
 use Validator;
 
 class SmsCronjobController extends Controller
@@ -21,7 +20,7 @@ class SmsCronjobController extends Controller
      */
     public function index()
     {
-        $data = SmsCronjob::select('id', 'time', 'content', 'status', 'created_at','name')->get();
+        $data = SmsCronjob::select('id', 'time', 'status', 'created_at', 'name')->get();
         return view('page.sms-cronjob.index', compact('data'));
     }
 
@@ -53,6 +52,57 @@ class SmsCronjobController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'time' => ['required'],
+            'text_phone' => ['required'],
+            'campaign_id' => ['required'],
+        ]);
+        if ($validator->fails()) {
+            $error = Helpers::getValidationError($validator);
+            return back()->with(['error' => $error])->withInput(Input::all());
+        }
+        //Lay sdt o file
+        $file = $request->file('file_phone');
+        $type = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/zip'];
+        $list_phones = [];
+        if (!empty($file)) {
+            if (in_array($file->getMimeType(), $type)) {
+                $path = $file->getRealPath();
+                $fileContent = Excel::load($path)->get();
+                if (!empty($fileContent[0])) {
+                    foreach ($fileContent as $key => $value) {
+                        if (!empty($value->sdt)) {
+                            $phone = $this->changePhone($value->sdt);
+                            if (empty($check)) {
+                                $list_phones[] = $phone;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        //Lay sdt
+        if (!empty($request->text_phone)) {
+            $data = explode("\r\n", $request->text_phone);
+            if (!empty($data)) {
+                foreach ($data as $item) {
+                    $item = $this->changePhone($item);
+                    if (strlen($item) == 10) {
+                        $list_phones[] = $item;
+                    }
+                }
+            }
+        }
+        $smsCronjob = new SmsCronjob();
+        $smsCronjob->time = $request->time;
+        $smsCronjob->name = $request->name;
+        $smsCronjob->campaign_id = $request->campaign_id;
+        $smsCronjob->list_phones = json_encode($list_phones);
+        $smsCronjob->status = SmsCronjob::$ACTIVE;
+        $smsCronjob->created_at = time();
+
+        $smsCronjob->save();
+        return redirect()->back()->with('success', 'Đặt lịch thành công');
     }
 
     /**
@@ -86,14 +136,24 @@ class SmsCronjobController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validator = Validator::make($request->all(), [
+            'time' => ['required'],
+            'text_phone' => ['required'],
+            'campaign_id' => ['required'],
+        ]);
+        if ($validator->fails()) {
+            $error = Helpers::getValidationError($validator);
+            return back()->with(['error' => $error])->withInput(Input::all());
+        }
+
         $cronjob = SmsCronjob::find($id);
-        if(isset($cronjob)){
+        if (isset($cronjob)) {
             $cronjob->name = $request->name;
             $cronjob->content = $request->content_sms;
             $cronjob->save();
-            return redirect()->back()->with('success','Lưu thành công');
-        }else{
-            return redirect()->back()->with('error','Cronjob không tồn tại');
+            return redirect()->back()->with('success', 'Lưu thành công');
+        } else {
+            return redirect()->back()->with('error', 'Cronjob không tồn tại');
         }
     }
 
@@ -229,7 +289,7 @@ class SmsCronjobController extends Controller
         $source = $request->source;
         $phone_customer = $request->phone_customer;
         $name_customer = $request->name_customer;
-        $content = $request->CONTENT . ' Website: ' . $source .' Tên: '.$name_customer. ' SDT: ' . $phone_customer;
+        $content = $request->CONTENT . ' Website: ' . $source . ' Tên: ' . $name_customer . ' SDT: ' . $phone_customer;
         $phones = $request->phones;
         $content_customer = $request->content_customer;
 
@@ -274,6 +334,40 @@ class SmsCronjobController extends Controller
         } else {
             return 'KXD';
         }
+    }
+
+    protected function changePhone($phone)
+    {
+        $phone = strip_tags($phone);
+        $phone = preg_replace("/[\/,.,?,*,' ']/","",$phone);
+        $firstNumber = substr($phone, 0, 4);
+        $array = [
+            '0120' => '070',
+            '0121' => '079',
+            '0122' => '077',
+            '0126' => '076',
+            '0128' => '078',
+            '0123' => '083',
+            '0124' => '084',
+            '0125' => '085',
+            '0127' => '081',
+            '0129' => '082',
+            '0162' => '032',
+            '0163' => '033',
+            '0164' => '034',
+            '0165' => '035',
+            '0166' => '036',
+            '0167' => '037',
+            '0168' => '038',
+            '0169' => '039',
+            '0186' => '056',
+            '0188' => '058',
+            '0199' => '059',
+        ];
+        if (isset($array[$firstNumber])) {
+            $phone = str_replace($firstNumber, $array[$firstNumber], $phone);
+        }
+        return $phone;
     }
 
     protected function cUrl($url)

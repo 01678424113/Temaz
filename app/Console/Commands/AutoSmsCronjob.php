@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Phone;
 use App\Models\Sim;
+use App\Models\SmsContent;
 use DB;
 use Illuminate\Console\Command;
 use App\Models\SmsCronjob;
@@ -45,12 +46,13 @@ class AutoSmsCronjob extends Command
         $smsCronjobs = SmsCronjob::where('status', SmsCronjob::$ACTIVE)->get();
         if (!empty($smsCronjobs)) {
             foreach ($smsCronjobs as $smsCronjob) {
+                $contents = SmsContent::select('content')->where('campaign_id', $smsCronjob->campaign_id)->get();
                 if (!empty(json_decode($smsCronjob->list_phones))) {
                     $i = 0;
-                    $content = $this->randomContent($smsCronjob->content);
                     foreach (json_decode($smsCronjob->list_phones) as $phone) {
+                        $content = $this->randomContent($contents);
                         $list_phones = json_decode($smsCronjob->list_phones);
-                        if(strlen($list_phones[$i]) > 9 || strlen($list_phones[$i]) < 12){
+                        if (strlen($list_phones[$i]) > 9 || strlen($list_phones[$i]) < 12) {
                             $this->sendSms($phone, $content, $smsCronjob->id);
                         }
                         unset($list_phones[$i]);
@@ -184,11 +186,13 @@ class AutoSmsCronjob extends Command
         return $phone;
     }
 
-    protected function randomContent($content)
+    protected function randomContent($contents)
     {
+        $content = $contents[rand(0, count($contents) - 1)]['content'];
         $random = ['Chào anh/chị', 'Chào Anh/Chị', 'Chào bạn', 'Chào Bạn', 'Hi bạn', 'Hi anh/chị', 'Hi Bạn', 'Hi Anh/Chị'];
         $random = $random[rand(0, count($random) - 1)];
         $content = str_replace('{random}', $random, $content);
+        echo $content;
         return $content;
     }
 

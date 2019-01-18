@@ -30,7 +30,6 @@
                         <tr>
                             <th>STT</th>
                             <th>Name</th>
-                            <th>Content</th>
                             <th>Thời gian</th>
                             <th>Trạng thái</th>
                             <th>Ngày tạo</th>
@@ -43,7 +42,6 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $value->name }}</td>
-                                    <td>{{ $value->content }}</td>
                                     <td>{{ $value->time }}</td>
                                     <td>
                                         @if($value->status == \App\Models\SmsCronjob::$ACTIVE)
