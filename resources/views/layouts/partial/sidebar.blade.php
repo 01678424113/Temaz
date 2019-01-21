@@ -32,7 +32,7 @@
             </li>
             <li>
                 <a href="javascript:;">
-                    <i class="fa fa-list"></i> SMS <span class="fa fa-chevron-down"></span>
+                    <i class="fa fa-inbox"></i> SMS <span class="fa fa-chevron-down"></span>
                 </a>
                 <ul class="nav child_menu">
                     <li><a href="{{ route('sms-cronjob.create') }}">Đặt lịch SMS</a></li>
@@ -41,7 +41,7 @@
             </li>
             <li>
                 <a href="javascript:;">
-                    <i class="fa fa-list"></i> Vay Nóng Online <span class="fa fa-chevron-down"></span>
+                    <i class="fa fa-money"></i> Vay Nóng Online <span class="fa fa-chevron-down"></span>
                 </a>
                 <form action="{{route('VayNongOnline.campaign')}}" method="get" id="campaign-vaynong">
                     <input type="hidden" name="table" value="campaign">

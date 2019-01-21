@@ -45,12 +45,16 @@
                                     <td>{{ $value->time }}</td>
                                     <td>
                                         @if($value->status == \App\Models\SmsCronjob::$ACTIVE)
-                                            <a href="{{route('sms-cronjob.activeCronjobSMS',['id'=>$value->id])}}"> <label
-                                                        style="cursor: pointer" class="label label-info">Đang chạy</label>
+                                            <a href="{{route('sms-cronjob.activeCronjobSMS',['id'=>$value->id])}}">
+                                                <label
+                                                        style="cursor: pointer" class="label label-info">Đang
+                                                    chạy</label>
                                             </a>
                                         @elseif($value->status == \App\Models\SmsCronjob::$UNACTIVE)
-                                            <a href="{{route('sms-cronjob.activeCronjobSMS',['id'=>$value->id])}}"> <label
-                                                        style="cursor: pointer" class="label label-danger">Không hoạt động</label>
+                                            <a href="{{route('sms-cronjob.activeCronjobSMS',['id'=>$value->id])}}">
+                                                <label
+                                                        style="cursor: pointer" class="label label-danger">Không hoạt
+                                                    động</label>
                                             </a>
                                         @endif
                                     </td>
@@ -59,6 +63,35 @@
                                         <a href="{{route('sms-cronjob.show',['id'=>$value->id])}}"
                                            class="btn btn-xs btn-success"><i
                                                     class="fa fa-eye"></i></a>
+                                        <button type="button" data-toggle="modal" data-target="#myModal-{{$value->id}}"
+                                                class="btn btn-xs btn-danger"><i
+                                                    class="fa fa-times"></i></button>
+                                        <div id="myModal-{{$value->id}}" class="modal fade" role="dialog">
+                                            <div class="modal-dialog">
+                                                <form action="{{route('sms-cronjob.destroy',['id'=>$value->id])}}"
+                                                      method="get">
+                                                    <!-- Modal content-->
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal">
+                                                                &times;
+                                                            </button>
+                                                            <h4 class="modal-title">Xóa</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Bạn muốn xóa vai trò này?</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default"
+                                                                    data-dismiss="modal">Hủy
+                                                            </button>
+                                                            <button type="submit" class="btn btn-danger">Tiếp tục
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

@@ -37,6 +37,7 @@ class ScanEmail extends Command
      */
     public function handle()
     {
+        //from=1000to=1793
         $from = $this->argument('from');
         $to = $this->argument('to');
         $domain = 'https://batdongsan.com.vn';

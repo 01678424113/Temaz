@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Libs\Helpers;
+use Exception;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Route;

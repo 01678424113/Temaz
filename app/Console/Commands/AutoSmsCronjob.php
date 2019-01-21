@@ -16,7 +16,7 @@ class AutoSmsCronjob extends Command
      *
      * @var string
      */
-    protected $signature = 'sms:cronjob';
+    protected $signature = 'sms:cronjob {time}';
 
     /**
      * The console command description.
@@ -42,8 +42,9 @@ class AutoSmsCronjob extends Command
      */
     public function handle()
     {
+        $time = $this->argument('time');
         \Log::info('Start cronjob');
-        $smsCronjobs = SmsCronjob::where('status', SmsCronjob::$ACTIVE)->get();
+        $smsCronjobs = SmsCronjob::where('status', SmsCronjob::$ACTIVE)->where('time',$time)->get();
         if (!empty($smsCronjobs)) {
             foreach ($smsCronjobs as $smsCronjob) {
                 $contents = SmsContent::select('content')->where('campaign_id', $smsCronjob->campaign_id)->get();

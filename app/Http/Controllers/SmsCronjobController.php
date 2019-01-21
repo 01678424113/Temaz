@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Libs\Helpers;
 use App\Models\Campaign;
 use App\Models\Phone;
+use App\Models\SmsContent;
 use App\Models\SmsCronjob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -165,6 +166,13 @@ class SmsCronjobController extends Controller
      */
     public function destroy($id)
     {
+        $smsCronjob = SmsContent::find($id);
+        if(isset($smsCronjob)){
+            $smsCronjob->delete();
+            return redirect()->back()->with('success','Xóa cronjob thành công');
+        }else{
+            return redirect()->back()->with('error','Đã xảy ra lỗi');
+        }
     }
 
     public function activeCronjobSMS($id)
