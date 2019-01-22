@@ -20,7 +20,7 @@ Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('/api', 'PhoneController@testAPI')->name('testAPI');
 Route::get('/scan', 'HomeController@scanPhone')->name('scanPhone');
-Route::get('/sms-report', 'SmsDataController@sendSmsReport')->name('sendSmsReport');
+Route::get('/sms-report', 'SmsCronjobController@sendSmsReport')->name('sendSmsReport');
 
 Route::group(['middleware' => ['auth', 'permissions']], function () {
     Route::group(['prefix' => 'user-manager'], function () {

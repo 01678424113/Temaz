@@ -297,20 +297,21 @@ class SmsCronjobController extends Controller
         $source = $request->source;
         $phone_customer = $request->phone_customer;
         $name_customer = $request->name_customer;
-        $content = $request->CONTENT . ' Website: ' . $source . ' Tên: ' . $name_customer . ' SDT: ' . $phone_customer;
+        $content = $request->CONTENT . $source ."\nTên: ".$name_customer. "\nSDT: " . $phone_customer;
         $phones = $request->phones;
         $content_customer = $request->content_customer;
 
         if (!empty($phone_customer)) {
             $sim = $this->checkPhone($phone_customer);
-            if ($sim == 'viettel') {
+            /*if ($sim == 'viettel') {
                 $sim = rand(1, 2);
             } elseif ($sim == 'vinaphone') {
                 $sim = 3;
             } elseif ($sim == 'mobiphone') {
                 $sim = 4;
-            }
-            $url = 'http://temaz2018.ddns.net/cgi/WebCGI?1500101=account=apiuser&password=apipass&port=' . $sim . '&destination=' . $phone_customer . '&content=' . urlencode($content_customer);
+            }*/
+            $sim = 1;
+            $url = 'http://temazsms.ddns.net/cgi/WebCGI?1500101=account=apiuser&password=apipass&port=' . $sim . '&destination=' . $phone_customer . '&content=' . urlencode($content_customer);
             $response = $this->cUrl($url);
         }
         if (!empty($phones)) {
@@ -323,7 +324,7 @@ class SmsCronjobController extends Controller
                 } elseif ($sim == 'mobiphone') {
                     $sim = 4;
                 }
-                $url = 'http://temaz2018.ddns.net/cgi/WebCGI?1500101=account=apiuser&password=apipass&port=' . $sim . '&destination=' . $phone . '&content=' . urlencode($content);
+                $url = 'http://temazsms.ddns.net/cgi/WebCGI?1500101=account=apiuser&password=apipass&port=' . $sim . '&destination=' . $phone . '&content=' . urlencode($content);
                 $response = $this->cUrl($url);
             }
         }
