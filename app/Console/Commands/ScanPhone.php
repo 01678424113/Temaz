@@ -44,7 +44,7 @@ class ScanPhone extends Command
             $link = 'https://ha-noi.congtydoanhnghiep.com/trang-';
         }
         $links = [];
-        for ($p = 1500; $p < 3000; $p++) {
+        for ($p = 3000; $p < 6000; $p++) {
             echo $p;
             $html = $this->cUrl($link . $p);
             preg_match_all('/<h2><a href=\"(.*?)\">.*?<\/a><\/h2>/', $html, $result);
@@ -78,8 +78,10 @@ class ScanPhone extends Command
                             $phone->save();
                             $count_phone++;
                         } catch (\Exception $e) {
+
                         }
                     }else{
+
                     }
                 }
             }

@@ -31,7 +31,7 @@ class HomeController extends Controller
         if (count($user->getRoleNames()) == 0) {
             $user->syncRoles('user');
         }
-        return view('home');
+        return view('admin.page.index');
     }
 
     public function import()
@@ -88,40 +88,10 @@ class HomeController extends Controller
         }
     }
 
-    public function scanPhone()
+    public function logout()
     {
-        $arrayPhones = [];
-        for ($i = 1; $i <= 900; $i++) {
-            if ($i == 1) {
-                $url = 'https://batdongsan.com.vn/nha-dat-cho-thue-tp-hcm';
-            } else {
-                $url = 'https://batdongsan.com.vn/nha-dat-cho-thue-tp-hcm/p' . $i;
-            }
-            $text = $this->cUrl($url);
-            $matches = array();
-            // returns all results in array $matches
-            preg_match_all('/[0-9]{4}[\.][0-9]{3}[\.][0-9]{3}|[0-9]{4}[\s][0-9]{3}[\s][0-9]{3}|[0-9]{11}|[0-9]{10}/', $text, $matches);
-            $matches = array_unique($matches[0]);
-            foreach ($matches as $key => $match) {
-                $arrayPhones[] = str_replace(['.', '-', ' '], ['', '', ''], trim($match));
-            }
-            foreach ($arrayPhones as $key => $phone) {
-                preg_match('/^(09[0-9]|08[0-9]|07[0-9]|05[0-9]|03[0-9])[0-9]{7}|(016[0-9]|012[0-9])[0-9]{7}$/', $phone, $matches);
-                if (empty($matches)) {
-                    unset($arrayPhones[$key]);
-                }
-            }
-        }
-        foreach ($arrayPhones as $item) {
-            $data = new PhoneBds();
-            $data->phone = $item;
-            try {
-                $data->save();
-            } catch (\Exception $e) {
-
-            }
-        }
-
+        \Auth::logout();
+        return redirect()->back();
     }
 
     public function cUrl($url)

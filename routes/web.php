@@ -17,6 +17,7 @@ Route::post('/forgot-password', 'Auth\ForgotPasswordController@sendMail')->name(
 Route::match(['get', 'post'], '/forgot-reset-password/{token}', 'Auth\ForgotPasswordController@resetPassword')->name('forgot.resetPassword');
 
 Route::get('/', 'HomeController@index')->name('home');
+Route::get('/logout', 'HomeController@logout')->name('logout');
 
 Route::get('/api', 'PhoneController@testAPI')->name('testAPI');
 Route::get('/scan', 'HomeController@scanPhone')->name('scanPhone');
