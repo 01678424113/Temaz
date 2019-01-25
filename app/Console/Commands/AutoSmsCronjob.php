@@ -79,7 +79,7 @@ class AutoSmsCronjob extends Command
     protected function sendSms($phone, $content, $cronjob_id)
     {
         $network = $this->checkPhone($phone);
-
+        $sim = 'KXD';
         if ($network == 'viettel') {
             $query_sim = Sim::where('network', $network)->where('status', 0)->first();
             if (!isset($query_sim)) {
@@ -89,13 +89,13 @@ class AutoSmsCronjob extends Command
             } else {
                 $sim = $query_sim->post;
             }
-        } elseif ($network = 'vinaphone') {
+        } /*elseif ($network = 'vinaphone') {
             $query_sim = Sim::where('network', $network)->first();
             $sim = $query_sim->post;
         } elseif ($network = 'mobiphone') {
             $query_sim = Sim::where('network', $network)->first();
             $sim = $query_sim->post;
-        }
+        }*/
         if ($sim == 'KXD') {
             return 'Error';
         }

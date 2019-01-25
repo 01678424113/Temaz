@@ -85,6 +85,7 @@ class SmsCronjobController extends Controller
         //Lay sdt
         if (!empty($request->text_phone)) {
             $data = explode("\r\n", $request->text_phone);
+            $data = array_unique($data);
             if (!empty($data)) {
                 foreach ($data as $item) {
                     $item = $this->changePhone($item);
@@ -166,12 +167,16 @@ class SmsCronjobController extends Controller
      */
     public function destroy($id)
     {
-        $smsCronjob = SmsContent::find($id);
-        if(isset($smsCronjob)){
-            $smsCronjob->delete();
-            return redirect()->back()->with('success','Xóa cronjob thành công');
-        }else{
-            return redirect()->back()->with('error','Đã xảy ra lỗi');
+        $smsCronjob = SmsCronjob::find($id);
+        if (isset($smsCronjob)) {
+            try {
+                $smsCronjob->delete();
+                return redirect()->back()->with('success', 'Xóa cronjob thành công');
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Đã xảy ra lỗi');
+            }
+        } else {
+            return redirect()->back()->with('error', 'Đã xảy ra lỗi');
         }
     }
 
@@ -297,7 +302,7 @@ class SmsCronjobController extends Controller
         $source = $request->source;
         $phone_customer = $request->phone_customer;
         $name_customer = $request->name_customer;
-        $content = $request->CONTENT . $source ."\nTên: ".$name_customer. "\nSDT: " . $phone_customer;
+        $content = $request->CONTENT . $source . "\nTên: " . $name_customer . "\nSDT: " . $phone_customer;
         $phones = $request->phones;
         $content_customer = $request->content_customer;
 
@@ -310,20 +315,21 @@ class SmsCronjobController extends Controller
             } elseif ($sim == 'mobiphone') {
                 $sim = 4;
             }*/
-            $sim = 1;
+            $sim = 4;
             $url = 'http://temazsms.ddns.net/cgi/WebCGI?1500101=account=apiuser&password=apipass&port=' . $sim . '&destination=' . $phone_customer . '&content=' . urlencode($content_customer);
             $response = $this->cUrl($url);
         }
         if (!empty($phones)) {
             foreach ($phones as $phone) {
                 $sim = $this->checkPhone($phone);
-                if ($sim == 'viettel') {
+               /* if ($sim == 'viettel') {
                     $sim = rand(1, 2);
                 } elseif ($sim == 'vinaphone') {
                     $sim = 3;
                 } elseif ($sim == 'mobiphone') {
                     $sim = 4;
-                }
+                }*/
+                $sim = 4;
                 $url = 'http://temazsms.ddns.net/cgi/WebCGI?1500101=account=apiuser&password=apipass&port=' . $sim . '&destination=' . $phone . '&content=' . urlencode($content);
                 $response = $this->cUrl($url);
             }
@@ -348,7 +354,12 @@ class SmsCronjobController extends Controller
     protected function changePhone($phone)
     {
         $phone = strip_tags($phone);
-        $phone = preg_replace("/[\/,.,?,*,' ']/","",$phone);
+        $phone = preg_replace("/[\/,.,?,*,' ']/", "", $phone);
+        $change = substr($phone, 0, 2);
+        if($change == "84"){
+            $phone = '+'.$phone;
+            $phone = str_replace("+84","0",$phone);
+        }
         $firstNumber = substr($phone, 0, 4);
         $array = [
             '0120' => '070',

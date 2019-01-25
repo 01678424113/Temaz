@@ -26,7 +26,6 @@ class PhoneController extends Controller
      */
     public function index()
     {
-
         $data = Phone::select('id', 'cronjob_id','phone', 'campaign_id')
             ->orderBy('created_at', 'DESC')
             ->cursor();

@@ -45,7 +45,7 @@ class ScanEmail extends Command
         $file = '/home/temaz.net/public_html/email.txt';
         for ($p = $from; $p < $to; $p++) {
             echo $p;
-            $html = $this->cUrl('https://batdongsan.com.vn/nha-dat-cho-thue/p' . $p);
+            $html = $this->cUrl('https://batdongsan.com.vn/nha-dat-ban/p' . $p);
             preg_match_all("/<a href=\'(.*?)\' title=\'.*?\'.*?>/", $html, $result);
             $find = $result[1];
             $links = array_merge($links, $find);
@@ -65,6 +65,7 @@ class ScanEmail extends Command
             $i++;
         }
         try{
+            $emails = array_unique($emails);
             file_put_contents($file, implode("\n", $emails) . "\n", FILE_APPEND);
         }catch (\Exception $e){
         }

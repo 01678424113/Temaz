@@ -44,7 +44,7 @@ class ScanPhone extends Command
             $link = 'https://ha-noi.congtydoanhnghiep.com/trang-';
         }
         $links = [];
-        for ($p = 750; $p < 751; $p++) {
+        for ($p = 1500; $p < 3000; $p++) {
             echo $p;
             $html = $this->cUrl($link . $p);
             preg_match_all('/<h2><a href=\"(.*?)\">.*?<\/a><\/h2>/', $html, $result);
@@ -63,8 +63,10 @@ class ScanPhone extends Command
                 $str_phone = str_replace('.', '', $str_phone);
                 $str_phone = str_replace(' ', '', $str_phone);
                 $str_phone = str_replace('/', '', $str_phone);
+                $str_phone = str_replace('+84', '0', $str_phone);
+                $str_phone = str_replace('84', '0', $str_phone);
                 $check = substr($str_phone, 0, 2);
-                if ($check != '02' && $check != '04' && $check != '84' && strlen($str_phone) > 11) {
+                if ($check != '02' && $check != '04' && strlen($str_phone) == 10) {
                     $check = Phone::where('phone', $str_phone)->first();
                     if (empty($check)) {
                         $phone = new Phone();
@@ -77,6 +79,7 @@ class ScanPhone extends Command
                             $count_phone++;
                         } catch (\Exception $e) {
                         }
+                    }else{
                     }
                 }
             }
