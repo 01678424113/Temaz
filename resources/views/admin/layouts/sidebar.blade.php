@@ -52,7 +52,6 @@
                     <li class="nav-item  ">
                         <a href="{{ route('permission.index') }}" class="nav-link ">
                             <span class="title">Quyền</span>
-                            <span class="badge badge-danger">2</span>
                         </a>
                     </li>
                 </ul>
@@ -94,12 +93,12 @@
                 <ul class="sub-menu">
                     <li class="nav-item  ">
                         <a href="javascript:void(0)" onclick="$('#campaign-vaynong').submit()" class="nav-link ">
-                            <span class="title">Campaign</span>
+                            <span class="title">Chiến dịch</span>
                         </a>
                     </li>
                     <li class="nav-item  ">
                         <a href="javascript:void(0)" onclick="$('#customer-vaynong').submit()" class="nav-link ">
-                            <span class="title">Customer</span>
+                            <span class="title">Khách hàng</span>
                         </a>
                     </li>
                 </ul>

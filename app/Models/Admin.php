@@ -11,6 +11,7 @@ class Admin extends Authenticatable
     use Notifiable, HasRoles;
 
     public static $ACTIVE_STATUS = 1;
+    public static $UNACTIVE_STATUS = 0;
 
     protected static function getAllData()
     {

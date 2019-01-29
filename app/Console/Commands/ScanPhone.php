@@ -38,13 +38,14 @@ class ScanPhone extends Command
      */
     public function handle()
     {
+        //Ha dong - Dong da
         $code = $this->argument('code');
         if ($code == 100000) {
             $address = 'Hà Nội';
-            $link = 'https://ha-noi.congtydoanhnghiep.com/trang-';
+            $link = 'https://ha-noi.congtydoanhnghiep.com/quan-dong-da/trang-';
         }
         $links = [];
-        for ($p = 3000; $p < 6000; $p++) {
+        for ($p = 0; $p < 1650; $p++) {
             echo $p;
             $html = $this->cUrl($link . $p);
             preg_match_all('/<h2><a href=\"(.*?)\">.*?<\/a><\/h2>/', $html, $result);

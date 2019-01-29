@@ -24,7 +24,8 @@ class UserAdminController extends Controller
     public function index()
     {
         $data = Admin::getAllData();
-        return view('page.user-manager.index', compact('data'));
+        $title = 'Danh sách tài khoản';
+        return view('admin.page.user-manager.index', compact('data','title'));
     }
 
     /**
@@ -36,7 +37,8 @@ class UserAdminController extends Controller
     {
         $roles = Role::get()->pluck('name', 'name')->toArray();
         $arrayCategories = Category::where('parent_id', 0)->pluck('name', 'id')->toArray();
-        return view('page.user-manager.create', compact('roles', 'arrayCategories'));
+        $title = 'Tạo tài khoản';
+        return view('admin.page.user-manager.create', compact('roles', 'arrayCategories','title'));
     }
 
     /**
@@ -101,7 +103,8 @@ class UserAdminController extends Controller
         $model = Admin::findOrFail($id);
         $roles = Role::get()->pluck('name', 'name')->toArray();
         $arrayCategories = Category::where('parent_id', 0)->pluck('name', 'id')->toArray();
-        return view('page.user-manager.edit', compact('model', 'roles', 'arrayCategories'));
+        $title = 'Sửa tài khoản';
+        return view('admin.page.user-manager.edit', compact('model', 'roles', 'arrayCategories','title'));
     }
 
     /**
