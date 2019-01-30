@@ -30,17 +30,6 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Nội dung
-                                            </label>
-                                            <div class="col-md-9 col-sm-6 col-xs-12 form-group has-feedback">
-                                                        <textarea name="content_sms" id="" cols="30" rows="10"
-                                                                  class="form-control"
-                                                                  required>{{$cronjob->content}}</textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Thời gian
                                             </label>
                                             <div class="col-md-9 col-sm-6 col-xs-12 form-group has-feedback">

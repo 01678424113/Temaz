@@ -24,7 +24,8 @@ class PermissionController extends Controller
     public function index()
     {
         $data = Permission::select('*')->orderBy('name','ASC')->cursor();
-        return view('page.decentralized-management.permission.index', compact('data'));
+        $title = 'Danh sách quyền';
+        return view('admin.page.decentralized-management.permission.index', compact('data','title'));
     }
 
     /**
@@ -34,7 +35,8 @@ class PermissionController extends Controller
      */
     public function create()
     {
-        return view('page.decentralized-management.permission.create');
+        $title = 'Tạo quyền';
+        return view('admin.page.decentralized-management.permission.create',compact('title'));
     }
 
     /**
@@ -80,7 +82,8 @@ class PermissionController extends Controller
     public function edit($id)
     {
         $model = Permission::findOrFail($id);
-        return view('page.decentralized-management.permission.edit', compact('model'));
+        $title = 'Sửa quyền';
+        return view('admin.page.decentralized-management.permission.edit', compact('model','title'));
     }
 
     /**

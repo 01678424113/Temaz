@@ -81,7 +81,7 @@
                                 @csrf
                                 <div class="form-body">
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">Têm
+                                        <label class="control-label col-md-3">Tên
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-4">

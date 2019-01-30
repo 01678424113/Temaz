@@ -8,7 +8,7 @@
         @include('admin.layouts.theme-panel')
         <!-- END THEME PANEL -->
             <h1 class="page-title"> {{$title}}
-                <small>tài khoản</small>
+                <small>quyền</small>
             </h1>
             <div class="page-bar">
                 <ul class="page-breadcrumb">
@@ -81,7 +81,7 @@
                                 @csrf
                                 <div class="form-body">
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">Tên
+                                        <label class="control-label col-md-3">Hành động
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-4">
@@ -89,63 +89,18 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">Email
+                                        <label class="control-label col-md-3">Chức năng
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-4">
-                                            <input name="email" type="text" class="form-control" value="{{$model->email}}"/></div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">Mật khẩu
-                                            <span class="required"> * </span>
-                                        </label>
-                                        <div class="col-md-4">
-                                            <input name="password" type="password" class="form-control"/>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">Nhập lại mật khẩu
-                                            <span class="required"> * </span>
-                                        </label>
-                                        <div class="col-md-4">
-                                            <input name="password_confirmation" type="password" class="form-control"/>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">Vai trò
-                                            <span class="required"> * </span>
-                                        </label>
-                                        <div class="col-md-4">
-                                            {!! Form::select('role',$roles, old('role')??$model->getRoleNames(), ['class' => 'form-control select2']) !!}
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">Dịch vụ
-                                            <span class="required"> * </span>
-                                        </label>
-                                        <div class="col-md-4">
-                                            {!! Form::select('category_id',$arrayCategories, $model->category_id, ['class' => 'form-control select2']) !!}
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">Trạng thái
-                                            <span class="required"> * </span>
-                                        </label>
-                                        <div class="col-md-4">
-                                            <div class="mt-checkbox-list">
-                                                <label class="mt-checkbox">
-                                                    <input type="checkbox" @if($model->status ?? '') checked @endif name="status"/>
-                                                    <span></span>
-                                                </label>
-                                            </div>
-                                        </div>
+                                            <input name="note" type="text" class="form-control" value="{{$model->note}}"/></div>
                                     </div>
                                 </div>
                                 <div class="form-actions">
                                     <div class="row">
                                         <div class="col-md-offset-3 col-md-9">
                                             <button type="submit" class="btn green">Lưu</button>
-                                            <a href="{{ route('user-admin.index') }}"
+                                            <a href="{{ route('permission.index') }}}"
                                                class="btn grey-salsa btn-outline">Quay lại</a>
                                         </div>
                                     </div>
