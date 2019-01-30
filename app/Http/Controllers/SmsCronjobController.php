@@ -22,7 +22,8 @@ class SmsCronjobController extends Controller
     public function index()
     {
         $data = SmsCronjob::select('id', 'time', 'status', 'created_at', 'name')->get();
-        return view('page.sms-cronjob.index', compact('data'));
+        $title = 'Danh sách Cronjob';
+        return view('admin.page.sms-cronjob.index', compact('data','title'));
     }
 
     /**
@@ -42,7 +43,8 @@ class SmsCronjobController extends Controller
                 ->where('campaigns.category_id', $user->category_id)
                 ->pluck('name', 'id')->toArray();
         }
-        return view('page.sms-cronjob.create', compact('arrayCampaigns'));
+        $title = 'Tạo SMS Cronjob';
+        return view('admin.page.sms-cronjob.create', compact('arrayCampaigns','title'));
     }
 
     /**
@@ -116,9 +118,9 @@ class SmsCronjobController extends Controller
     public function show($id)
     {
         $cronjob = SmsCronjob::find($id);
-        return view('page.sms-cronjob.show', compact('cronjob'));
+        $title = 'Danh sách Cronjob';
+        return view('admin.page.sms-cronjob.show', compact('cronjob','title'));
     }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -127,6 +129,7 @@ class SmsCronjobController extends Controller
      */
     public function edit($id)
     {
+
     }
 
     /**

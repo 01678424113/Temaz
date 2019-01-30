@@ -8,7 +8,7 @@
         @include('admin.layouts.theme-panel')
         <!-- END THEME PANEL -->
             <h1 class="page-title"> {{$title}}
-                <small>số điện thoại</small>
+                <small>sms cronjob</small>
             </h1>
             <div class="page-bar">
                 <ul class="page-breadcrumb">
@@ -79,7 +79,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="btn-group">
-                                            <a href="{{route('campaign.create')}}" class="btn sbold green"> Thêm chiến dịch
+                                            <a href="{{route('sms-cronjob.create')}}" class="btn sbold green"> Thêm cronjob
                                                 <i class="fa fa-plus"></i>
                                             </a>
                                         </div>
@@ -119,12 +119,12 @@
                                             <span></span>
                                         </label>
                                     </th>
-                                    <th>Thông tin</th>
-                                    <th>Sale</th>
-                                    <th>Ngày</th>
-                                    <th>Note</th>
-                                    <th>Check</th>
-                                    <th></th>
+                                    <th>STT</th>
+                                    <th>Name</th>
+                                    <th>Thời gian</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Hành động</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -138,47 +138,57 @@
                                             </label>
                                         </td>
                                         <td>{{ $i }}</td>
-                                        <td>
-                                            Tên: {{ $item->name }}<br>
-                                            Email: {{ $item->email }}<br>
-                                            SDT: {{ $item->phone }}<br>
-                                            Nguồn: {{ $item->source }}<br>
-                                            Trang thái: {{($item->status == \App\Models\Phone::$FAIL) ? 'Thất bại' : ''}}{{($item->status == \App\Models\Phone::$NOT_PROCESS) ? 'Chưa hỗ trợ' : ''}}{{($item->status == \App\Models\Phone::$PROCESS) ? 'Chờ phản hồi' : ''}}{{($item->status == \App\Models\Phone::$SUCCESS) ? 'Thành công' : ''}}
-                                        </td>
-                                        <td>{{ $item->sale }}</td>
+                                        <td>{{ $item->name }}</td>
                                         <td>{{ $item->time }}</td>
-                                        <form action="{{route('phone.updateNote',['id'=>$item->id])}}"
-                                              id="data-{{$item->id}}" method="post">
-                                            @csrf
-                                            <td>
-                                            <textarea name="note" id="" cols="30" class="form-control" rows="10"
-                                                      onblur="changeNote({{$item->id}})"
-                                                      style="width: 100%">{{$item->note}}</textarea>
-                                            </td>
-                                            <td>
-                                                <select name="status" class="form-control select-status" onchange="changeNote({{$item->id}})">
-                                                    <option value="{{\App\Models\Phone::$FAIL}}" {{($item->status == \App\Models\Phone::$FAIL) ? 'selected' : ''}}>
-                                                        Thất bại
-                                                    </option>
-                                                    <option value="{{\App\Models\Phone::$NOT_PROCESS}}" {{($item->status == \App\Models\Phone::$NOT_PROCESS) ? 'selected' : ''}}>
-                                                        Chưa hỗ trợ
-                                                    </option>
-                                                    <option value="{{\App\Models\Phone::$PROCESS}}" {{($item->status == \App\Models\Phone::$PROCESS) ? 'selected' : ''}}>
-                                                        Chờ phản hồi
-                                                    </option>
-                                                    <option value="{{\App\Models\Phone::$SUCCESS}}" {{($item->status == \App\Models\Phone::$SUCCESS) ? 'selected' : ''}}>
-                                                        Thành công
-                                                    </option>
-                                                </select>
-                                            </td>
-                                        </form>
-                                        <td class="text-center">
-                                            <a href="{{route('phone.edit',['id'=>$item->id])}}"
-                                               class="btn btn-xs btn-info"><i
-                                                        class="fa fa-edit"></i></a>
-                                            <a href="{{route('phone.destroy',['id'=>$item->id])}}"
-                                               class="btn btn-xs btn-danger"><i
-                                                        class="fa fa-times"></i></a>
+                                        <td>
+                                            @if($item->status == \App\Models\SmsCronjob::$ACTIVE)
+                                                <a style="text-decoration: none" href="{{route('sms-cronjob.activeCronjobSMS',['id'=>$item->id])}}">
+                                                    <label
+                                                            style="cursor: pointer;font-size: 10px" class="label label-info">Đang
+                                                        chạy</label>
+                                                </a>
+                                            @elseif($item->status == \App\Models\SmsCronjob::$UNACTIVE)
+                                                <a style="text-decoration: none" href="{{route('sms-cronjob.activeCronjobSMS',['id'=>$item->id])}}">
+                                                    <label
+                                                            style="cursor: pointer;font-size: 10px" class="label label-danger">Không hoạt
+                                                        động</label>
+                                                </a>
+                                            @endif
+                                        </td>
+                                        <td>{{ $item->created_at }}</td>
+                                        <td>
+                                            <a href="{{route('sms-cronjob.show',['id'=>$item->id])}}"
+                                               class="btn btn-xs btn-success"><i
+                                                        class="fa fa-eye"></i></a>
+                                            <button type="button" data-toggle="modal" data-target="#myModal-{{$item->id}}"
+                                                    class="btn btn-xs btn-danger"><i
+                                                        class="fa fa-times"></i></button>
+                                            <div id="myModal-{{$item->id}}" class="modal fade" role="dialog">
+                                                <div class="modal-dialog">
+                                                    <form action="{{route('sms-cronjob.destroy',['id'=>$item->id])}}"
+                                                          method="get">
+                                                        <!-- Modal content-->
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal">
+                                                                    &times;
+                                                                </button>
+                                                                <h4 class="modal-title">Xóa</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p>Bạn muốn xóa cronjob này?</p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default"
+                                                                        data-dismiss="modal">Hủy
+                                                                </button>
+                                                                <button type="submit" class="btn btn-danger">Tiếp tục
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                     <?php $i++ ?>
@@ -193,39 +203,4 @@
         </div>
         <!-- END CONTENT BODY -->
     </div>
-@endsection
-@section('script')
-    <script>
-        function changeNote(id) {
-            var url = $("#data-" + id).attr('action');
-            $.ajax({
-                url: url,
-                method: 'post',
-                data: $("#data-" + id).serialize(),
-                success: function (data) {
-                    if (data['status']) {
-                        console.log(data['message']);
-                    } else {
-                        console.log(data['message']);
-                    }
-                }
-            })
-        }
-    </script>  <script>
-        function changeNote(id) {
-            var url = $("#data-" + id).attr('action');
-            $.ajax({
-                url: url,
-                method: 'post',
-                data: $("#data-" + id).serialize(),
-                success: function (data) {
-                    if (data['status']) {
-                        console.log(data['message']);
-                    } else {
-                        console.log(data['message']);
-                    }
-                }
-            })
-        }
-    </script>
 @endsection
