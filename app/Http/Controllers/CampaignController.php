@@ -49,7 +49,8 @@ class CampaignController extends Controller
             $category_id = 0;
             $arrayCategories = Category::where('id', $user->category_id)->pluck('name', 'id')->toArray();
         }
-        return view('page.campaign.index', compact('data', 'arrayCategories', 'category_id'));
+        $title = 'Danh sách chiến dịch';
+        return view('admin.page.campaign.index', compact('data', 'arrayCategories', 'category_id','title'));
     }
 
     /**
@@ -60,7 +61,8 @@ class CampaignController extends Controller
     public function create()
     {
         $arrayCategories = Category::where('parent_id', 0)->pluck('name', 'id')->toArray();
-        return view('page.campaign.create', compact('arrayCategories'));
+        $title = 'Tạo chiến dịch';
+        return view('admin.page.campaign.create', compact('arrayCategories','title'));
     }
 
     /**
@@ -112,7 +114,8 @@ class CampaignController extends Controller
         $data = Phone::where('campaign_id', $id)->cursor();
         $campaign = Campaign::where('id',$id)->where('status',Campaign::$ACTIVE)->first();
         if(!empty($campaign)){
-            return view('page.campaign.show', compact('data'));
+            $title = 'Danh sách số điện thoại';
+            return view('admin.page.campaign.show', compact('data','title'));
         }else{
             return redirect()->back()->with('error','Chiến dịch này không hoạt động hoặc không tồn tại');
         }
@@ -129,7 +132,8 @@ class CampaignController extends Controller
         $smsContents = SmsContent::where('campaign_id',$id)->get();
         $arrayCategories = Category::where('parent_id', 0)->pluck('name', 'id')->toArray();
         $campaign = Campaign::find($id);
-        return view('page.campaign.edit', compact('arrayCategories', 'campaign','smsContents'));
+        $title = 'Sửa chiến dịch';
+        return view('admin.page.campaign.edit', compact('arrayCategories', 'campaign','smsContents','title'));
     }
 
     /**

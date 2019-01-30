@@ -37,7 +37,8 @@ class HomeController extends Controller
     public function import()
     {
         $campaigns = Campaign::select('id', 'name')->pluck('name', 'id')->toArray();
-        return view('page.import.create', compact('campaigns'));
+        $title = 'Import';
+        return view('admin.page.import.create', compact('campaigns','title'));
     }
 
     public function doImport(Request $request)

@@ -48,6 +48,7 @@
     <link href="admin/assets/layouts/layout2/css/custom.min.css" rel="stylesheet" type="text/css"/>
     <!-- END THEME LAYOUT STYLES -->
     <link rel="shortcut icon" href="favicon.ico"/>
+    @yield('style')
 </head>
 <!-- END HEAD -->
 
@@ -101,6 +102,7 @@
         toastr['warning']('{!! Session::get("warning") !!}');
     @endif
 </script>
+@yield('script')
 </body>
 
 </html>

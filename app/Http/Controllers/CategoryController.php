@@ -23,7 +23,8 @@ class CategoryController extends Controller
         $categoryChildes = Category::where('parent_id', '<>', '')->orderBy('sort_order', 'ASC')->get();
         $categoryParents = Category::where('parent_id', '')->orderBy('sort_order', 'ASC')->get();
         $arrayCategoryParents = Category::where('parent_id', 0)->pluck('name', 'id')->toArray();
-        return view('page.category.index', compact('categoryChildes', 'categoryParents', 'arrayCategoryParents'));
+        $title = 'Danh sách dịch vụ';
+        return view('admin.page.category.index', compact('categoryChildes', 'categoryParents', 'arrayCategoryParents','title'));
     }
 
     /**

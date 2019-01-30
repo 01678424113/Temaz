@@ -56,10 +56,30 @@
                     </li>
                 </ul>
             </li>
+
+            <li class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                    <i class="icon-puzzle"></i>
+                    <span class="title">Dịch vụ</span>
+                    <span class="arrow"></span>
+                </a>
+                <ul class="sub-menu">
+                    <li class="nav-item  ">
+                        <a href="{{ route('category.index') }}" class="nav-link ">
+                            <span class="title">Danh sách dịch vụ</span>
+                        </a>
+                    </li>
+                    <li class="nav-item  ">
+                        <a href="{{ route('campaign.index') }}" class="nav-link ">
+                            <span class="title">Chiến dịch</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
             <li class="nav-item  ">
                 <a href="javascript:;" class="nav-link nav-toggle">
                     <i class="icon-settings"></i>
-                    <span class="title">Dịch vụ</span>
+                    <span class="title">SMS</span>
                     <span class="arrow"></span>
                 </a>
                 <ul class="sub-menu">

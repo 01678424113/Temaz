@@ -630,7 +630,6 @@
             border-radius: 4px;
         }
     </style>
-
 @endpush
 @push('scripts')
     <script src="style-menu/jquery.nestable.js"></script>
