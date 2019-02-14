@@ -95,7 +95,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="nav-item  ">
+           {{-- <li class="nav-item  ">
                 <a href="javascript:;" class="nav-link nav-toggle">
                     <i class="icon-bulb"></i>
                     <span class="title">Vay Nóng Online</span>
@@ -122,7 +122,7 @@
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li>--}}
         </ul>
         <!-- END SIDEBAR MENU -->
     </div>

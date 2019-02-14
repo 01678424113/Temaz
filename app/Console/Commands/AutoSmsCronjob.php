@@ -106,7 +106,7 @@ class AutoSmsCronjob extends Command
         }
         $query_sim->save();
         echo $sim;
-        $url = 'http://temazsms.ddns.net/cgi/WebCGI?1500101=account=apiuser&password=apipass&port=' . $sim . '&destination=' . $phone . '&content=' . urlencode($content);
+        $url = 'http://'.env('DOMAIN_SMS').'/cgi/WebCGI?1500101=account=apiuser&password=apipass&port=' . $sim . '&destination=' . $phone . '&content=' . urlencode($content);
         $response = $this->cUrl($url);
         //Save history phone
         preg_match_all('/.*?Response\: Success.*?/', $response, $status);

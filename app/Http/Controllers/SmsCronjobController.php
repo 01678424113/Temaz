@@ -319,7 +319,7 @@ class SmsCronjobController extends Controller
                 $sim = 4;
             }*/
             $sim = 4;
-            $url = 'http://temazsms.ddns.net/cgi/WebCGI?1500101=account=apiuser&password=apipass&port=' . $sim . '&destination=' . $phone_customer . '&content=' . urlencode($content_customer);
+            $url = 'http://'.env('DOMAIN_SMS').'/cgi/WebCGI?1500101=account=apiuser&password=apipass&port=' . $sim . '&destination=' . $phone_customer . '&content=' . urlencode($content_customer);
             $response = $this->cUrl($url);
         }
         if (!empty($phones)) {
@@ -333,7 +333,7 @@ class SmsCronjobController extends Controller
                     $sim = 4;
                 }*/
                 $sim = 4;
-                $url = 'http://temazsms.ddns.net/cgi/WebCGI?1500101=account=apiuser&password=apipass&port=' . $sim . '&destination=' . $phone . '&content=' . urlencode($content);
+                $url = 'http://'.env('DOMAIN_SMS').'/cgi/WebCGI?1500101=account=apiuser&password=apipass&port=' . $sim . '&destination=' . $phone . '&content=' . urlencode($content);
                 $response = $this->cUrl($url);
             }
         }
