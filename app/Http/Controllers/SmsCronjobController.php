@@ -90,9 +90,12 @@ class SmsCronjobController extends Controller
             $data = array_unique($data);
             if (!empty($data)) {
                 foreach ($data as $item) {
-                    $item = $this->changePhone($item);
-                    if (strlen($item) == 10) {
-                        $list_phones[] = $item;
+                    $check = substr($item, 0, 2);
+                    if($check != '02' && $check != '04'){
+                        $item = $this->changePhone($item);
+                        if (strlen($item) == 10) {
+                            $list_phones[] = $item;
+                        }
                     }
                 }
             }

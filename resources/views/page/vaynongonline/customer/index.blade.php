@@ -124,11 +124,10 @@
             var address = $('#address_' + id).val();
             var email = $('#email_' + id).val();
             var sotienmuonvay = $('#sotienmuonvay_' + id).val();
-            alert("https://vaynongonline.com/api/api-temaz-edit.php?id=" + id + "&age=" + age + "&gender=" + gender + "&address=" + address + "&email=" + email + "&sotienmuonvay=" + sotienmuonvay);
             $.get("https://vaynongonline.com/api/api-temaz-edit.php?id=" + id + "&age=" + age + "&gender=" + gender + "&address=" + address + "&email=" + email + "&sotienmuonvay=" + sotienmuonvay, function (data) {
                 alert("Load was performed.");
             });
-        })
+        });
         $('.select-campaign').change(function () {
             $('#search_campaign').submit();
         });

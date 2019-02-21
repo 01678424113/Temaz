@@ -228,7 +228,6 @@
 
         function changeContentSms(id) {
             var url = $("#content-" + id).attr('action');
-            alert(url);
             $.ajax({
                 url: url,
                 method: 'post',
