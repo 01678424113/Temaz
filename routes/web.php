@@ -19,8 +19,7 @@ Route::match(['get', 'post'], '/forgot-reset-password/{token}', 'Auth\ForgotPass
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/logout', 'HomeController@logout')->name('logout');
 
-Route::get('/api', 'PhoneController@testAPI')->name('testAPI');
-Route::get('/scan', 'HomeController@scanPhone')->name('scanPhone');
+Route::get('/scan-tax-code', 'HomeController@scanTaxCode')->name('scanTaxCode');
 Route::get('/sms-report', 'SmsCronjobController@sendSmsReport')->name('sendSmsReport');
 
 Route::group(['middleware' => ['auth', 'permissions']], function () {

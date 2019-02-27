@@ -8,7 +8,7 @@
         @include('admin.layouts.theme-panel')
         <!-- END THEME PANEL -->
             <h1 class="page-title"> {{$title}}
-                <small>vai trò</small>
+                <small>phone</small>
             </h1>
             <div class="page-bar">
                 <ul class="page-breadcrumb">
@@ -78,11 +78,7 @@
                             <div class="table-toolbar">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="btn-group">
-                                            <a href="{{route('role.create')}}" class="btn sbold green"> Thêm vai trò
-                                                <i class="fa fa-plus"></i>
-                                            </a>
-                                        </div>
+
                                     </div>
                                     <div class="col-md-6">
                                         <div class="btn-group pull-right">
@@ -119,9 +115,11 @@
                                             <span></span>
                                         </label>
                                     </th>
-                                    <th>STT</th>
-                                    <th>Quyền</th>
-                                    <th>Hành động</th>
+                                    <th> STT</th>
+                                    <th> Số điện thoại</th>
+                                    <th> Chiến dịch</th>
+                                    <th> Cronjob ID</th>
+                                    <th> Hành động</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -135,9 +133,11 @@
                                             </label>
                                         </td>
                                         <td>{{ $i }}</td>
-                                        <td>{{ $item->name }}</td>
+                                        <td>{{ $item->phone }}</td>
+                                        <td>{{ $item->campaign_id }}</td>
+                                        <td>{{ $item->cronjob_id }}</td>
                                         <td>
-                                            <a href="{{ route('role.edit', $item->id) }}"
+                                            <a href="{{ route('phone.edit', $item->id) }}"
                                                class="btn btn-xs btn-info"><i
                                                         class="fa fa-pencil"></i></a>
                                             <button type="button" data-toggle="modal"
@@ -146,7 +146,7 @@
                                                         class="fa fa-times"></i></button>
                                             <div id="myModal-{{$item->id}}" class="modal fade" role="dialog">
                                                 <div class="modal-dialog">
-                                                    <form action="{{route('role.destroy',['id'=>$item->id])}}"
+                                                    <form action="{{route('phone.destroy',['id'=>$item->id])}}"
                                                           method="get">
                                                         <!-- Modal content-->
                                                         <div class="modal-content">
@@ -157,7 +157,7 @@
                                                                 <h4 class="modal-title">Xóa</h4>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <p>Bạn muốn xóa vai trò này?</p>
+                                                                <p>Bạn muốn xóa user này?</p>
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-default"
@@ -176,6 +176,7 @@
                                 @endforeach
                                 </tbody>
                             </table>
+                            {{$data->links()}}
                         </div>
                     </div>
                     <!-- END EXAMPLE TABLE PORTLET-->

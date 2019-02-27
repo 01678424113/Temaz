@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Campaign;
 use App\Models\Phone;
 use App\Models\PhoneBds;
+use File;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -38,7 +39,7 @@ class HomeController extends Controller
     {
         $campaigns = Campaign::select('id', 'name')->pluck('name', 'id')->toArray();
         $title = 'Import';
-        return view('admin.page.import.create', compact('campaigns','title'));
+        return view('admin.page.import.create', compact('campaigns', 'title'));
     }
 
     public function doImport(Request $request)
@@ -125,4 +126,6 @@ class HomeController extends Controller
         $header['content'] = $content;
         return $content;
     }
+
+
 }

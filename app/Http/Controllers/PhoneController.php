@@ -26,10 +26,11 @@ class PhoneController extends Controller
      */
     public function index()
     {
+        $title = 'Danh sách số điện thoại';
         $data = Phone::select('id', 'cronjob_id','phone', 'campaign_id')
             ->orderBy('created_at', 'DESC')
-            ->cursor();
-        return view('page.phone.index', compact('data'));
+            ->paginate(20);
+        return view('admin.page.phone.index', compact('data','title'));
     }
 
     /**

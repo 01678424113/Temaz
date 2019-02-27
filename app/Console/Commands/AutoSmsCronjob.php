@@ -63,7 +63,7 @@ class AutoSmsCronjob extends Command
                         }
                         $smsCronjob->list_phones = json_encode($list_phone_new);
                         $smsCronjob->save();
-                        if ($i == 4) {
+                        if ($i == 3) {
                             break;
                         }
                         $i++;
@@ -81,10 +81,10 @@ class AutoSmsCronjob extends Command
         $network = $this->checkPhone($phone);
         $sim = 'KXD';
         if ($network == 'viettel') {
-            $query_sim = Sim::where('network', $network)->where('status', 0)->first();
+            $query_sim = Sim::where('network', $network)->where('status', 0)->where('post','<>',4)->first();
             if (!isset($query_sim)) {
                 DB::table('sims')->where('network', $network)->update(['status' => 0]);
-                $query_sim = Sim::where('network', $network)->where('status', 0)->first();
+                $query_sim = Sim::where('network', $network)->where('status', 0)->where('post','<>',4)->first();
                 $sim = $query_sim->post;
             } else {
                 $sim = $query_sim->post;
@@ -110,11 +110,6 @@ class AutoSmsCronjob extends Command
         $response = $this->cUrl($url);
         //Save history phone
         preg_match_all('/.*?Response\: Success.*?/', $response, $status);
-        if (isset($status[0][0]) && $status[0][0] == 'Response: Success') {
-            $status = 1;
-        } else {
-            $status = 0;
-        }
         $check = Phone::where('phone', $phone)->first();
         if (empty($check)) {
             try {
@@ -122,10 +117,11 @@ class AutoSmsCronjob extends Command
                 $newPhone->phone = $phone;
                 $newPhone->cronjob_id = $cronjob_id;
                 $newPhone->count_send_sms = 1;
-                if ($status == 1) {
+                if (isset($status[0][0]) && $status[0][0] == 'Response: Success') {
                     $newPhone->send_success = $newPhone->send_success + 1;
                 } else {
                     $newPhone->send_error = $newPhone->send_error + 1;
+
                 }
                 $newPhone->created_at = date('Y-m-d H:i:s');
                 $newPhone->save();

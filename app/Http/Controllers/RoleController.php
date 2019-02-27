@@ -21,8 +21,9 @@ class RoleController extends Controller
      */
     public function index()
     {
+        $title = 'Danh sách vai trò';
         $data = Role::cursor();
-        return view('page.decentralized-management.role.index', compact('data'));
+        return view('admin.page.decentralized-management.role.index', compact('data','title'));
     }
 
     /**
@@ -32,8 +33,9 @@ class RoleController extends Controller
      */
     public function create()
     {
+        $title = 'Tạo vai trò';
         $permissions = Permission::all();
-        return view('page.decentralized-management.role.create', compact('permissions'));
+        return view('admin.page.decentralized-management.role.create', compact('permissions','title'));
     }
 
     /**
@@ -80,9 +82,10 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
+        $title = 'Sửa vai trò';
         $role = Role::findOrFail($id);
         $permissions = Permission::all();
-        return view('page.decentralized-management.role.edit', compact('role','permissions'));
+        return view('admin.page.decentralized-management.role.edit', compact('role','permissions','title'));
     }
 
     /**
@@ -124,10 +127,10 @@ class RoleController extends Controller
     public function destroy($id)
     {
         $role = Role::find($id);
-        if($id != 1){
-            /*$role->delete();
-            AdminModelHasRoles::where('role_id',$id)->delete();*/
-            return redirect()->back()->with('success','Chức năng này hiện tạm bị khóa');
+        if($id != 1 && $id != 2){
+            $role->delete();
+            AdminModelHasRoles::where('role_id',$id)->delete();
+            return redirect()->back()->with('success','Xóa vai trò thành công');
         }else{
             return redirect()->back()->with('error','Không thể xóa quyền admin');
         }
