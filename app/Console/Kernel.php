@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         'App\Console\Commands\AutoSmsCronjob',
         'App\Console\Commands\ScanPhone',
         'App\Console\Commands\ScanTaxCode',
+        'App\Console\Commands\ScanWithKey',
     ];
 
     /**
