@@ -28,8 +28,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('clean:directories')->daily();
-        $schedule->command('auto:update')->daily();
+        $schedule->command('sms:cronjob 1')->cron('* * * * *');;
+        $schedule->command('sms:cronjob 5')->cron('*/5 * * * *');;
+        $schedule->command('sms:cronjob 10')->cron('*/10 * * * *');;
     }
 
     /**

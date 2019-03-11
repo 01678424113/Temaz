@@ -44,7 +44,7 @@ class AutoSmsCronjob extends Command
     {
         $time = $this->argument('time');
         \Log::info('Start cronjob');
-        $smsCronjobs = SmsCronjob::where('status', SmsCronjob::$ACTIVE)->where('time',$time)->get();
+        $smsCronjobs = SmsCronjob::where('status', SmsCronjob::$ACTIVE)->where('time', $time)->get();
         if (!empty($smsCronjobs)) {
             foreach ($smsCronjobs as $smsCronjob) {
                 $contents = SmsContent::select('content')->where('campaign_id', $smsCronjob->campaign_id)->get();
@@ -81,21 +81,24 @@ class AutoSmsCronjob extends Command
         $network = $this->checkPhone($phone);
         $sim = 'KXD';
         if ($network == 'viettel') {
-            $query_sim = Sim::where('network', $network)->where('status', 0)->where('post','<>',4)->first();
+//            $query_sim = Sim::where('network', $network)->where('status', 0)->where('post', '<>', 4)->first();
+            $query_sim = Sim::where('network', $network)->where('post', 3)->first();
             if (!isset($query_sim)) {
                 DB::table('sims')->where('network', $network)->update(['status' => 0]);
-                $query_sim = Sim::where('network', $network)->where('status', 0)->where('post','<>',4)->first();
+                $query_sim = Sim::where('network', $network)->where('status', 0)->where('post', '<>', 4)->first();
                 $sim = $query_sim->post;
             } else {
                 $sim = $query_sim->post;
             }
-        } /*elseif ($network = 'vinaphone') {
-            $query_sim = Sim::where('network', $network)->first();
+        } elseif ($network = 'vinaphone') {
+            $query_sim = Sim::where('post', 3)->first();
+            /* $query_sim = Sim::where('network', $network)->first();*/
             $sim = $query_sim->post;
         } elseif ($network = 'mobiphone') {
-            $query_sim = Sim::where('network', $network)->first();
+            $query_sim = Sim::where('post', 3)->first();
+            /* $query_sim = Sim::where('network', $network)->first();*/
             $sim = $query_sim->post;
-        }*/
+        }
         if ($sim == 'KXD') {
             return 'Error';
         }
@@ -106,7 +109,7 @@ class AutoSmsCronjob extends Command
         }
         $query_sim->save();
         echo $sim;
-        $url = 'http://'.env('DOMAIN_SMS').'/cgi/WebCGI?1500101=account=apiuser&password=apipass&port=' . $sim . '&destination=' . $phone . '&content=' . urlencode($content);
+        $url = 'http://' . env('DOMAIN_SMS') . '/cgi/WebCGI?1500101=account=apiuser&password=apipass&port=' . $sim . '&destination=' . $phone . '&content=' . urlencode($content);
         $response = $this->cUrl($url);
         //Save history phone
         preg_match_all('/.*?Response\: Success.*?/', $response, $status);
@@ -121,7 +124,6 @@ class AutoSmsCronjob extends Command
                     $newPhone->send_success = $newPhone->send_success + 1;
                 } else {
                     $newPhone->send_error = $newPhone->send_error + 1;
-
                 }
                 $newPhone->created_at = date('Y-m-d H:i:s');
                 $newPhone->save();
@@ -133,7 +135,6 @@ class AutoSmsCronjob extends Command
             $check->count_send_sms = $check->count_send_sms + 1;
             $check->save();
         }
-
         return 1;
     }
 
